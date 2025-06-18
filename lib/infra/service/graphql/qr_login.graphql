@@ -1,0 +1,32 @@
+subscription DeviceAuth($deviceId: String!) {
+  deviceAuth(deviceId: $deviceId) {
+    accessToken
+    refreshToken
+    idToken
+    username
+    deviceId
+  }
+}
+
+mutation addDevice(
+  $accessToken: String!
+  $refreshToken: String!
+  $username: String
+  $deviceId: String!
+) {
+  addDevice(
+    input: {
+      request: {
+        accessToken: $accessToken
+        refreshToken: $refreshToken
+        username: $username
+        deviceId: $deviceId
+      }
+    }
+  ) {
+    openIddictResponseDto {
+      idToken
+      deviceId
+    }
+  }
+}

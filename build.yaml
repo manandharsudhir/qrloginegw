@@ -1,0 +1,20 @@
+targets:
+  $default:
+    builders:
+      ferry_generator|graphql_builder:
+        enabled: true
+        options:
+          schemas:
+            - qrlogin|lib/infra/service/graphql/schema.graphql
+          type_overrides:
+            Long:
+              name: int
+            LibraryCollectionTypeEnum:
+              name: String
+            ListBuilder:
+              name: List    
+      ferry_generator|serializer_builder:
+        enabled: true
+        options:
+          schemas:
+            - qrlogin|lib/infra/service/graphql/schema.graphql
