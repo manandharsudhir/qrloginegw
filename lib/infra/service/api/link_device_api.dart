@@ -3,31 +3,29 @@ import 'dart:developer';
 
 import 'package:ferry/ferry.dart';
 import 'package:get_it/get_it.dart';
-import 'package:qrlogin/infra/ioc/link_device_client_initialization.dart';
 import 'package:qrlogin/infra/service/graphql/__generated__/qr_login.req.gql.dart';
+import 'package:qrlogin/infra/service/model/link_device_success_model.dart';
 
 class LinkDeviceApi {
-  final _tvQrClient = GetIt.I<Client>(
-    instanceName: linkDeviceTvClientInstanceName,
-  );
-  final _loginClient = GetIt.I<Client>(
-    instanceName: linkDeviceMobileClientInstanceName,
-  );
+  LinkDeviceApi({required this.tvQrClient, required this.loginClient});
 
-  Future<bool> loginReq(String deviceId) async {
-    final completer = Completer<bool>();
+  final Client tvQrClient;
+  final Client loginClient;
+
+  Future<LinkDeviceSuccessModel?> loginReq(String deviceId) async {
+    final completer = Completer<LinkDeviceSuccessModel?>();
 
     try {
       log("🔄 Starting subscription for deviceId: $deviceId");
 
-      _tvQrClient
+      tvQrClient
           .request(
             GDeviceAuthReq((builder) {
               builder.vars.deviceId = deviceId;
             }),
           )
           .listen(
-            (result) {
+            (result) async {
               log("✅ Received data: ${result.data}");
 
               if (result.hasErrors) {
@@ -35,15 +33,20 @@ class LinkDeviceApi {
               }
 
               final token = result.data?.deviceAuth?.accessToken;
+              final refreshToken = result.data?.deviceAuth?.refreshToken;
               if (token != null) {
                 log("🔑 Access Token: $token");
-                if (!completer.isCompleted) {
-                  completer.complete(true);
-                }
 
-                _tvQrClient.dispose(); // ✅ Dispose client
+                if (!completer.isCompleted) {
+                  completer.complete(
+                    LinkDeviceSuccessModel(
+                      accessToken: token,
+                      refreshToken: refreshToken ?? "",
+                    ),
+                  );
+                }
               } else {
-                completer.complete(false);
+                completer.complete(null);
               }
             },
             onError: (e) {
@@ -68,7 +71,7 @@ class LinkDeviceApi {
     required String refreshToken,
   }) async {
     try {
-      final res = await _loginClient
+      final res = await loginClient
           .request(
             GaddDeviceReq((builder) {
               builder.vars.accessToken = token;

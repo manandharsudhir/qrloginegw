@@ -1,7 +1,7 @@
 name: qrlogin
 description: "A new Flutter package project."
 version: 0.0.1
-homepage: "https://github.com/EGW-Alpha/EGW-flutter-packages"
+homepage: "https://github.com/manandharsudhir/qrloginegw"
 publish_to: none
 
 environment:
