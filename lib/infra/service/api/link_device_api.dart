@@ -30,6 +30,7 @@ class LinkDeviceApi {
 
               if (result.hasErrors) {
                 log("❌ GraphQL Errors: ${result.graphqlErrors}");
+                completer.completeError("GraphQL Errors");
               }
 
               final token = result.data?.deviceAuth?.accessToken;
