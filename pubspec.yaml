@@ -25,7 +25,8 @@ dependencies:
   gql_websocket_link: ^2.0.1
 
 
-
+dependency_overrides:
+  rxdart: ^0.28.0
 
 dev_dependencies:
   flutter_test:
