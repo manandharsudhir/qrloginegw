@@ -1,27 +1,217 @@
 schema {
   query: EgwCpanelQueries
   mutation: EgwCpanelMutations
-  subscription: EgwCpanelSubscriptionsQueries
+  subscription: EgwCpanelSubscriptions
 }
 
-union AddDeviceError = ProblemDetailsError
+"""
+The `TimeSpan` scalar represents an ISO-8601 compliant duration type.
+"""
+scalar TimeSpan
 
-input AddDeviceInput {
-  request: OpenIddictResponseDtoInput!
+"""
+Organization management queries extension
+"""
+type EgwCpanelQueries {
+  """
+  List backups
+  """
+  backups: [DateTime!]!
+
+  """
+  Returns a list of OAuth applications owned by the user.
+  """
+  ownApps: [OAuthApplicationDescription!]!
+
+  """
+  Administration
+  """
+  admin: AdminNamespaceType!
+
+  """
+  Get the current user's profile
+  """
+  userProfileByEmail(email: String!): UserProfileByEmailDto
+
+  """
+  Get the current user's profile
+  """
+  me: ProfileDetailsResponse
+
+  """
+  Get delivery options for the current user
+  """
+  subscriptionsGetDeliveryOptions: DeliverySettingsResponse!
+
+  """
+  Lists delivery methods for the current user
+  """
+  subscriptionsDeliveryMethods: [DeliveryMethodResponse!]!
+
+  """
+  Get list of subscriptions
+  """
+  subscriptionsGetList: [SubscriptionResponse!]!
+
+  """
+  Get list of feeds
+  """
+  subscriptionsGetFeeds: [FeedResponse!]!
+
+  """
+  Get list of books
+  """
+  subscriptionsGetBooks: [SubscriptionBookResponse!]!
+
+  """
+  Get TOC for a book
+  """
+  subscriptionsGetBookToc(bookId: Int!): [TocResponse!]!
+
+  """
+  Gets social auth details
+  """
+  subscriptionsSocialAuthDetails: SocialApplicationResponse!
+
+  """
+  Gets facebook account details
+  """
+  subscriptionsFacebookAccount: FacebookDto!
+
+  """
+  Organization management namespace
+  """
+  orgManager: OrgManagerNamespace!
 }
 
-type AddDevicePayload {
-  openIddictResponseDto: OpenIddictResponseDto
-  errors: [AddDeviceError!]
+"""
+Problem details error
+"""
+type ProblemDetailsError implements Error {
+  """
+  HTTP-based status code
+  """
+  code: Int!
+
+  """
+  Exception message
+  """
+  message: String!
+
+  """
+  Exception details
+  """
+  details: String
+
+  """
+  Custom errors
+  """
+  errors: [ErrorGroup!]
 }
 
-input AddPackageRequestInput {
-  id: UUID!
-  title: String!
-  price: Float!
-  fullPrice: Float!
-  description: String
-  books: [Int!]!
+"""
+A segment of a collection.
+"""
+type ApplicationsCollectionSegment {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: CollectionSegmentInfo!
+
+  """
+  A flattened list of the items.
+  """
+  items: [AdminApplicationDetailsDto!]
+  totalCount: Int!
+}
+
+"""
+User DTO for admin area
+"""
+input AdminUserDtoFilterInput {
+  and: [AdminUserDtoFilterInput!]
+  or: [AdminUserDtoFilterInput!]
+
+  """
+  User ID
+  """
+  id: LongOperationFilterInput
+
+  """
+  Username
+  """
+  username: StringOperationFilterInput
+
+  """
+  Email
+  """
+  email: StringOperationFilterInput
+
+  """
+  Email is confirmed
+  """
+  emailConfirmed: BooleanOperationFilterInput
+
+  """
+  Two factor authentication is enabled
+  """
+  twoFactorEnabled: BooleanOperationFilterInput
+
+  """
+  Lockout is enabled
+  """
+  lockoutEnabled: BooleanOperationFilterInput
+
+  """
+  First name
+  """
+  firstName: StringOperationFilterInput
+
+  """
+  Last name
+  """
+  lastName: StringOperationFilterInput
+}
+
+"""
+A segment of a collection.
+"""
+type UsersCollectionSegment {
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: CollectionSegmentInfo!
+
+  """
+  A flattened list of the items.
+  """
+  items: [AdminUserDto!]
+  totalCount: Int!
+}
+
+enum ApplyPolicy {
+  BEFORE_RESOLVER
+  AFTER_RESOLVER
+  VALIDATION
+}
+
+interface Error {
+  message: String!
+}
+
+"""
+Information about the offset pagination.
+"""
+type CollectionSegmentInfo {
+  """
+  Indicates whether more items exist following the set defined by the clients arguments.
+  """
+  hasNextPage: Boolean!
+
+  """
+  Indicates whether more items exist prior the set defined by the clients arguments.
+  """
+  hasPreviousPage: Boolean!
 }
 
 """
@@ -84,331 +274,39 @@ type AdminApplicationDetailsDto {
   scopes: [String!]!
 }
 
-"""
-Price history item
-"""
-type AdminBookPriceHistoryItem {
-  """
-  Created at
-  """
-  createAt: DateTime!
-
-  """
-  Delete at
-  """
-  deleteAt: DateTime
-
-  """
-  Price
-  """
-  price: Float!
-
-  """
-  Full price
-  """
-  fullPrice: Float!
+input LongOperationFilterInput {
+  eq: Long
+  neq: Long
+  in: [Long]
+  nin: [Long]
+  gt: Long
+  ngt: Long
+  gte: Long
+  ngte: Long
+  lt: Long
+  nlt: Long
+  lte: Long
+  nlte: Long
 }
 
-union AdminDeleteApplicationError = ProblemDetailsError
-
-input AdminDeleteApplicationInput {
-  clientId: String!
+input StringOperationFilterInput {
+  and: [StringOperationFilterInput!]
+  or: [StringOperationFilterInput!]
+  eq: String
+  neq: String
+  contains: String
+  ncontains: String
+  in: [String]
+  nin: [String]
+  startsWith: String
+  nstartsWith: String
+  endsWith: String
+  nendsWith: String
 }
 
-type AdminDeleteApplicationPayload {
-  boolean: Boolean
-  errors: [AdminDeleteApplicationError!]
-}
-
-union AdminGenerateTokenError = ProblemDetailsError
-
-input AdminGenerateTokenInput {
-  userId: Int!
-  expiresIn: Int!
-  roles: [String!]
-  scopes: [String!]!
-}
-
-type AdminGenerateTokenPayload {
-  generatedTokenDto: GeneratedTokenDto
-  errors: [AdminGenerateTokenError!]
-}
-
-"""
-Admin namespace
-"""
-type AdminNamespaceType {
-  """
-  Dummy property
-  """
-  dummy: Boolean!
-  application(id: String!): AdminApplicationDetailsDto!
-  applications(
-    skip: Int
-    take: Int
-    query: String
-  ): ApplicationsCollectionSegment
-  users(
-    skip: Int
-    take: Int
-    where: AdminUserDtoFilterInput
-  ): UsersCollectionSegment
-  user(id: Int!): AdminUserDto
-  roles: [String!]!
-  scopes: AvailableScopesDto!
-  roleScopes: [AdminRoleScopeDto!]!
-  storeBooks: [AdminStoreItem!]!
-  storeBookHistory(id: Int!): [AdminBookPriceHistoryItem!]!
-  storePackages: [AdminStorePackageItem!]!
-}
-
-union AdminPackageCreateError = ProblemDetailsError
-
-input AdminPackageCreateInput {
-  payload: AddPackageRequestInput!
-}
-
-type AdminPackageCreatePayload {
-  boolean: Boolean
-  errors: [AdminPackageCreateError!]
-}
-
-union AdminPackageDeleteError = ProblemDetailsError
-
-input AdminPackageDeleteInput {
-  id: UUID!
-}
-
-type AdminPackageDeletePayload {
-  boolean: Boolean
-  errors: [AdminPackageDeleteError!]
-}
-
-union AdminPackageUpdateError = ProblemDetailsError
-
-input AdminPackageUpdateInput {
-  payload: EditPackageRequestInput!
-}
-
-type AdminPackageUpdatePayload {
-  boolean: Boolean
-  errors: [AdminPackageUpdateError!]
-}
-
-"""
-Role scope DTO for admin area
-"""
-type AdminRoleScopeDto {
-  """
-  Role scope ID
-  """
-  name: String!
-
-  """
-  Role scope description
-  """
-  description: String!
-}
-
-union AdminSetBookPriceError = ProblemDetailsError
-
-input AdminSetBookPriceInput {
-  bookId: Int!
-  order: Int!
-  price: Float!
-  fullPrice: Float!
-}
-
-type AdminSetBookPricePayload {
-  boolean: Boolean
-  errors: [AdminSetBookPriceError!]
-}
-
-union AdminSetUserPasswordError = ProblemDetailsError
-
-input AdminSetUserPasswordInput {
-  userId: Int!
-  password: String!
-}
-
-type AdminSetUserPasswordPayload {
-  boolean: Boolean
-  errors: [AdminSetUserPasswordError!]
-}
-
-union AdminStoreBookDeleteError = ProblemDetailsError
-
-input AdminStoreBookDeleteInput {
-  id: UUID!
-}
-
-type AdminStoreBookDeletePayload {
-  boolean: Boolean
-  errors: [AdminStoreBookDeleteError!]
-}
-
-"""
-Admin store item
-"""
-type AdminStoreItem {
-  """
-  Id
-  """
-  id: UUID!
-
-  """
-  Is in store
-  """
-  inStore: Boolean!
-
-  """
-  Book id
-  """
-  bookId: Int!
-
-  """
-  Price
-  """
-  price: Float!
-
-  """
-  Full price
-  """
-  fullPrice: Float!
-
-  """
-  Order
-  """
-  order: Int!
-
-  """
-  Code
-  """
-  code: String!
-
-  """
-  Title
-  """
-  title: String!
-
-  """
-  Date of creation
-  """
-  createDate: DateTime!
-}
-
-"""
-Package item
-"""
-type AdminStorePackageItem {
-  """
-  Id
-  """
-  id: ID!
-
-  """
-  Title
-  """
-  title: String!
-
-  """
-  Description
-  """
-  description: String!
-
-  """
-  Price
-  """
-  price: Float!
-
-  """
-  Full price
-  """
-  fullPrice: Float!
-
-  """
-  Date of creation
-  """
-  createDate: DateTime!
-
-  """
-  List of books in a package
-  """
-  books: [BookInPackageItem!]!
-}
-
-union AdminUpdateApplicationError = ProblemDetailsError
-
-"""
-Updates application
-"""
-input AdminUpdateApplicationInput {
-  """
-  Client secrets - only relevant for flows that require a secret
-  """
-  clientId: String!
-
-  """
-  Client secrets - only relevant for flows that require a secret
-  """
-  clientSecret: String!
-
-  """
-  Application owner id
-  """
-  ownerId: Long
-
-  """
-  Client display name (used for logging and consent screen)
-  """
-  clientName: String!
-
-  """
-  Description of the client.
-  """
-  clientDescription: String
-
-  """
-  URI to further information about client (used on consent screen)
-  """
-  clientUri: URL
-
-  """
-  Specifies allowed URIs to return tokens or authorization codes to
-  """
-  redirectUris: [URL!]!
-
-  """
-  Client type ("public" or "confidential")
-  """
-  clientType: String!
-
-  """
-  Consent type ("implicit" or "explicit")
-  """
-  consentType: String!
-
-  """
-  Require Ellen4All consent
-  """
-  requirements: [String!]!
-  scopes: [String!]!
-}
-
-type AdminUpdateApplicationPayload {
-  adminApplicationDetailsDto: AdminApplicationDetailsDto
-  errors: [AdminUpdateApplicationError!]
-}
-
-union AdminUpdateUserError = ProblemDetailsError
-
-input AdminUpdateUserInput {
-  payload: UpdateUserCommandInput!
-}
-
-type AdminUpdateUserPayload {
-  boolean: Boolean
-  errors: [AdminUpdateUserError!]
+input BooleanOperationFilterInput {
+  eq: Boolean
+  neq: Boolean
 }
 
 """
@@ -459,318 +357,9 @@ type AdminUserDto {
 }
 
 """
-User DTO for admin area
+The `Long` scalar type represents non-fractional signed whole 64-bit numeric values. Long can represent values between -(2^63) and 2^63 - 1.
 """
-input AdminUserDtoFilterInput {
-  and: [AdminUserDtoFilterInput!]
-  or: [AdminUserDtoFilterInput!]
-
-  """
-  User ID
-  """
-  id: LongOperationFilterInput
-
-  """
-  Username
-  """
-  username: StringOperationFilterInput
-
-  """
-  Email
-  """
-  email: StringOperationFilterInput
-
-  """
-  Email is confirmed
-  """
-  emailConfirmed: BooleanOperationFilterInput
-
-  """
-  Two factor authentication is enabled
-  """
-  twoFactorEnabled: BooleanOperationFilterInput
-
-  """
-  Lockout is enabled
-  """
-  lockoutEnabled: BooleanOperationFilterInput
-
-  """
-  First name
-  """
-  firstName: StringOperationFilterInput
-
-  """
-  Last name
-  """
-  lastName: StringOperationFilterInput
-}
-
-"""
-A segment of a collection.
-"""
-type ApplicationsCollectionSegment {
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: CollectionSegmentInfo!
-
-  """
-  A flattened list of the items.
-  """
-  items: [AdminApplicationDetailsDto!]
-  totalCount: Int!
-}
-
-enum ApplyPolicy {
-  BEFORE_RESOLVER
-  AFTER_RESOLVER
-  VALIDATION
-}
-
-"""
-Available scopes DTO
-"""
-type AvailableScopesDto {
-  """
-  Identity scopes
-  """
-  identity: [String!]!
-
-  """
-  Resource scopes
-  """
-  resources: [String!]!
-}
-
-type BookInPackageItem {
-  bookId: Int!
-  title: String
-  code: String
-}
-
-"""
-Book role enum
-"""
-enum BookRoleEnum {
-  """
-  Translator
-  """
-  TRANSLATOR
-
-  """
-  Editor
-  """
-  EDITOR
-
-  """
-  Reviewer
-  """
-  REVIEWER
-
-  """
-  Approver
-  """
-  APPROVER
-}
-
-input BooleanOperationFilterInput {
-  eq: Boolean
-  neq: Boolean
-}
-
-"""
-Information about the offset pagination.
-"""
-type CollectionSegmentInfo {
-  """
-  Indicates whether more items exist following the set defined by the clients arguments.
-  """
-  hasNextPage: Boolean!
-
-  """
-  Indicates whether more items exist prior the set defined by the clients arguments.
-  """
-  hasPreviousPage: Boolean!
-}
-
-union CreateOwnApplicationError = ProblemDetailsError
-
-"""
-Creates an OAuth application owned by the user.
-"""
-input CreateOwnApplicationInput {
-  """
-  Name
-  """
-  clientName: String!
-
-  """
-  Description
-  """
-  description: String
-
-  """
-  Client URI
-  """
-  clientUri: URL
-
-  """
-  List of redirect URIs
-  """
-  redirectUris: [URL!]!
-}
-
-type CreateOwnApplicationPayload {
-  boolean: Boolean
-  errors: [CreateOwnApplicationError!]
-}
-
-union CreateRoleScopeError = ProblemDetailsError
-
-"""
-Creates a new role scope
-"""
-input CreateRoleScopeInput {
-  """
-  The name of the role scope to create
-  """
-  name: String!
-
-  """
-  Description for the role scope
-  """
-  description: String!
-}
-
-type CreateRoleScopePayload {
-  boolean: Boolean
-  errors: [CreateRoleScopeError!]
-}
-
-union CreateScopedRoleError = ProblemDetailsError
-
-"""
-Create role input
-"""
-input CreateScopedRoleInput {
-  """
-  Role name
-  """
-  name: String!
-
-  """
-  Role Scope. Global, if empty
-  """
-  scope: String
-}
-
-type CreateScopedRolePayload {
-  boolean: Boolean
-  errors: [CreateScopedRoleError!]
-}
-
-"""
-The `DateTime` scalar represents an ISO-8601 compliant date time type.
-"""
-scalar DateTime
-
-union DeleteOwnApplicationError = ProblemDetailsError
-
-input DeleteOwnApplicationInput {
-  """
-  Client ID
-  """
-  clientId: String!
-}
-
-type DeleteOwnApplicationPayload {
-  boolean: Boolean
-  errors: [DeleteOwnApplicationError!]
-}
-
-union DeleteRoleScopeError = ProblemDetailsError
-
-"""
-Deletes a role scope
-"""
-input DeleteRoleScopeInput {
-  """
-  The name of the role scope to delete
-  """
-  name: String!
-}
-
-type DeleteRoleScopePayload {
-  boolean: Boolean
-  errors: [DeleteRoleScopeError!]
-}
-
-union DeleteScopedRoleError = ProblemDetailsError
-
-"""
-Delete role input
-"""
-input DeleteScopedRoleInput {
-  """
-  Role name
-  """
-  name: String!
-}
-
-type DeleteScopedRolePayload {
-  boolean: Boolean
-  errors: [DeleteScopedRoleError!]
-}
-
-"""
-Delivery method response.
-"""
-type DeliveryMethodResponse {
-  """
-  Code
-  """
-  code: String!
-
-  """
-  Name
-  """
-  name: String!
-
-  """
-  Is the delivery method enabled?
-  """
-  enabled: Boolean!
-}
-
-"""
-Delivery settings for a user.
-"""
-type DeliverySettingsResponse {
-  """
-  Time zone for the user.
-  """
-  timeZone: String!
-
-  """
-  Delivery time for the user.
-  """
-  deliveryTime: String!
-
-  """
-  Available time zones for the user.
-  """
-  availableTimeZones: [String!]!
-}
-
-input EditPackageRequestInput {
-  id: UUID!
-  title: String!
-  price: Float!
-  fullPrice: Float!
-  description: String
-  books: [Int!]!
-}
+scalar Long
 
 """
 Organization management queries extension
@@ -943,6 +532,7 @@ type EgwCpanelMutations {
   Sets a book price
   """
   adminSetBookPrice(input: AdminSetBookPriceInput!): AdminSetBookPricePayload!
+  addDevice(input: AddDeviceInput!): AddDevicePayload!
 
   """
   Set delivery options for a subscription
@@ -1009,7 +599,6 @@ type EgwCpanelMutations {
   Disconnect from facebook
   """
   subscriptionFacebookDisconnect: SubscriptionFacebookDisconnectPayload!
-  addDevice(input: AddDeviceInput!): AddDevicePayload!
 
   """
   Organization management namespace
@@ -1066,86 +655,162 @@ type EgwCpanelMutations {
 }
 
 """
-Organization management queries extension
+Queries for the GraphQL API
 """
-type EgwCpanelQueries {
-  """
-  List backups
-  """
-  backups: [DateTime!]!
-
-  """
-  Returns a list of OAuth applications owned by the user.
-  """
-  ownApps: [OAuthApplicationDescription!]!
-
-  """
-  Administration
-  """
-  admin: AdminNamespaceType!
-
-  """
-  Get the current user's profile
-  """
-  userProfileByEmail(email: String!): UserProfileByEmailDto
-
-  """
-  Get the current user's profile
-  """
-  me: ProfileDetailsResponse
-
-  """
-  Get delivery options for the current user
-  """
-  subscriptionsGetDeliveryOptions: DeliverySettingsResponse!
-
-  """
-  Lists delivery methods for the current user
-  """
-  subscriptionsDeliveryMethods: [DeliveryMethodResponse!]!
-
-  """
-  Get list of subscriptions
-  """
-  subscriptionsGetList: [SubscriptionResponse!]!
-
-  """
-  Get list of feeds
-  """
-  subscriptionsGetFeeds: [FeedResponse!]!
-
-  """
-  Get list of books
-  """
-  subscriptionsGetBooks: [SubscriptionBookResponse!]!
-
-  """
-  Get TOC for a book
-  """
-  subscriptionsGetBookToc(bookId: Int!): [TocResponse!]!
-
-  """
-  Gets social auth details
-  """
-  subscriptionsSocialAuthDetails: SocialApplicationResponse!
-
-  """
-  Gets facebook account details
-  """
-  subscriptionsFacebookAccount: FacebookDto!
-
-  """
-  Organization management namespace
-  """
-  orgManager: OrgManagerNamespace!
+type EgwCpanelSubscriptions {
+  deviceAuth(deviceId: String!): DeviceCodeSubscriptionDto!
 }
 
-type EgwCpanelSubscriptionsQueries {
-  deviceAuth(deviceId: String!): OpenIddictResponseDto
+scalar URL @specifiedBy(url: "https://tools.ietf.org/html/rfc3986")
+
+"""
+Available scopes DTO
+"""
+type AvailableScopesDto {
+  """
+  Identity scopes
+  """
+  identity: [String!]!
+
+  """
+  Resource scopes
+  """
+  resources: [String!]!
 }
 
-interface Error {
-  message: String!
+"""
+Role scope DTO for admin area
+"""
+type AdminRoleScopeDto {
+  """
+  Role scope ID
+  """
+  name: String!
+
+  """
+  Role scope description
+  """
+  description: String!
+}
+
+"""
+Admin store item
+"""
+type AdminStoreItem {
+  """
+  Id
+  """
+  id: UUID!
+
+  """
+  Is in store
+  """
+  inStore: Boolean!
+
+  """
+  Book id
+  """
+  bookId: Int!
+
+  """
+  Price
+  """
+  price: Float!
+
+  """
+  Full price
+  """
+  fullPrice: Float!
+
+  """
+  Order
+  """
+  order: Int!
+
+  """
+  Code
+  """
+  code: String!
+
+  """
+  Title
+  """
+  title: String!
+
+  """
+  Date of creation
+  """
+  createDate: DateTime!
+}
+
+"""
+Price history item
+"""
+type AdminBookPriceHistoryItem {
+  """
+  Created at
+  """
+  createAt: DateTime!
+
+  """
+  Delete at
+  """
+  deleteAt: DateTime
+
+  """
+  Price
+  """
+  price: Float!
+
+  """
+  Full price
+  """
+  fullPrice: Float!
+}
+
+"""
+Package item
+"""
+type AdminStorePackageItem {
+  """
+  Id
+  """
+  id: ID!
+
+  """
+  Title
+  """
+  title: String!
+
+  """
+  Description
+  """
+  description: String!
+
+  """
+  Price
+  """
+  price: Float!
+
+  """
+  Full price
+  """
+  fullPrice: Float!
+
+  """
+  Date of creation
+  """
+  createDate: DateTime!
+
+  """
+  List of books in a package
+  """
+  books: [BookInPackageItem!]!
+}
+
+type OrgUserE4aLinkStatus {
+  e4aUserId: Int
+  status: OrgUserStatus!
 }
 
 """
@@ -1163,15 +828,54 @@ type ErrorGroup {
   errors: [String!]!
 }
 
-type FacebookDto {
-  facebookId: String
-  facebookAccessToken: String
-  facebookExpireTime: DateTime
+"""
+Table of contents for a subscription.
+"""
+type TocResponse {
+  """
+  Order of the item in the table of contents.
+  """
+  order: Int!
+
+  """
+  Title of the item in the table of contents.
+  """
+  title: String!
 }
 
-enum FeedDtoFeedType {
-  NEWS
-  THOUGHT
+"""
+Subscription book response.
+"""
+type SubscriptionBookResponse {
+  """
+  Book ID.
+  """
+  bookId: Int!
+
+  """
+  Book type.
+  """
+  bookType: SubscriptionBookDtoBookType!
+
+  """
+  Language of the book.
+  """
+  language: String!
+
+  """
+  Title of the book.
+  """
+  title: String!
+
+  """
+  Number of chunks in the book.
+  """
+  chunks: Int!
+
+  """
+  Book is subscribed to.
+  """
+  subscribed: Boolean!
 }
 
 """
@@ -1210,6 +914,205 @@ type FeedResponse {
 }
 
 """
+Subscription response.
+"""
+type SubscriptionResponse {
+  """
+  Subscription ID
+  """
+  id: Int!
+
+  """
+  Book information.
+  """
+  book: SubscriptionBookResponse!
+
+  """
+  Paused until
+  """
+  pausedUntil: DateTime
+
+  """
+  Start date of the subscription.
+  """
+  startDate: DateTime
+
+  """
+  End date of the subscription.
+  """
+  endDate: DateTime
+
+  """
+  Is the subscription active?
+  """
+  active: Boolean!
+
+  """
+  Start order of the subscription.
+  """
+  startOrder: Int!
+
+  """
+  Weekdays of the subscription.
+  """
+  weekdays: String!
+
+  """
+  Items per day of the subscription.
+  """
+  itemsPerDay: Float!
+
+  """
+  Delivery time of the subscription.
+  """
+  deliveryTime: TimeSpan!
+
+  """
+  List of delivery methods.
+  """
+  deliveryMethods: [String!]!
+}
+
+"""
+Delivery method response.
+"""
+type DeliveryMethodResponse {
+  """
+  Code
+  """
+  code: String!
+
+  """
+  Name
+  """
+  name: String!
+
+  """
+  Is the delivery method enabled?
+  """
+  enabled: Boolean!
+}
+
+"""
+Delivery settings for a user.
+"""
+type DeliverySettingsResponse {
+  """
+  Time zone for the user.
+  """
+  timeZone: String!
+
+  """
+  Delivery time for the user.
+  """
+  deliveryTime: String!
+
+  """
+  Available time zones for the user.
+  """
+  availableTimeZones: [String!]!
+}
+
+"""
+profile details response
+"""
+type ProfileDetailsResponse {
+  """
+  Id
+  """
+  id: Long!
+
+  """
+  User name
+  """
+  userName: String!
+
+  """
+  User email
+  """
+  email: String!
+
+  """
+  First name
+  """
+  firstName: String!
+
+  """
+  Last name
+  """
+  lastName: String!
+
+  """
+  Phone
+  """
+  phone: String!
+
+  """
+  Email is confirmed
+  """
+  emailIsConfirmed: Boolean!
+
+  """
+  Has password
+  """
+  hasPassword: Boolean!
+
+  """
+  Roles
+  """
+  roles: [String!]!
+
+  """
+  User GUID
+  """
+  userGuid: UUID!
+}
+
+"""
+User profile by email DTO
+"""
+type UserProfileByEmailDto {
+  id: Long!
+  email: String!
+}
+
+input DeviceCodeSubscriptionDtoInput {
+  accessToken: String!
+  refreshToken: String!
+  idToken: String!
+  username: String!
+  deviceId: String!
+}
+
+type DeviceCodeSubscriptionDto {
+  accessToken: String!
+  refreshToken: String!
+  idToken: String!
+  username: String!
+  deviceId: String!
+}
+
+scalar UUID @specifiedBy(url: "https://tools.ietf.org/html/rfc4122")
+
+input EditPackageRequestInput {
+  id: UUID!
+  title: String!
+  price: Float!
+  fullPrice: Float!
+  description: String
+  books: [Int!]!
+}
+
+input AddPackageRequestInput {
+  id: UUID!
+  title: String!
+  price: Float!
+  fullPrice: Float!
+  description: String
+  books: [Int!]!
+}
+
+"""
 Generated token DTO
 """
 type GeneratedTokenDto {
@@ -1217,24 +1120,262 @@ type GeneratedTokenDto {
 }
 
 """
-The `Long` scalar type represents non-fractional signed whole 64-bit numeric
-values. Long can represent values between -(2^63) and 2^63 - 1.
+Updates a user
 """
-scalar Long
+input UpdateUserCommandInput {
+  """
+  The user id
+  """
+  userId: Int!
 
-input LongOperationFilterInput {
-  eq: Long
-  neq: Long
-  in: [Long]
-  nin: [Long]
-  gt: Long
-  ngt: Long
-  gte: Long
-  ngte: Long
-  lt: Long
-  nlt: Long
-  lte: Long
-  nlte: Long
+  """
+  Username
+  """
+  userName: String
+
+  """
+  Email address
+  """
+  email: String
+
+  """
+  Email is confirmed
+  """
+  emailConfirmed: Boolean
+
+  """
+  Lockout enabled
+  """
+  lockoutEnabled: Boolean
+
+  """
+  First name
+  """
+  firstName: String
+
+  """
+  Last name
+  """
+  lastName: String
+
+  """
+  List of roles
+  """
+  roles: [String!]
+}
+
+"""
+Delete role input
+"""
+input DeleteScopedRoleInput {
+  """
+  Role name
+  """
+  name: String!
+}
+
+"""
+Create role input
+"""
+input CreateScopedRoleInput {
+  """
+  Role name
+  """
+  name: String!
+
+  """
+  Role Scope. Global, if empty
+  """
+  scope: String
+}
+
+"""
+Deletes a role scope
+"""
+input DeleteRoleScopeInput {
+  """
+  The name of the role scope to delete
+  """
+  name: String!
+}
+
+"""
+Social application settings for a user.
+"""
+type SocialApplicationResponse {
+  """
+  Facebook app ID for the user.
+  """
+  facebookAppId: String!
+}
+
+"""
+Updates a role scope
+"""
+input UpdateRoleScopeInput {
+  """
+  The name of the role scope to delete
+  """
+  name: String!
+
+  """
+  New description for the role scope
+  """
+  description: String!
+}
+
+"""
+Creates a new role scope
+"""
+input CreateRoleScopeInput {
+  """
+  The name of the role scope to create
+  """
+  name: String!
+
+  """
+  Description for the role scope
+  """
+  description: String!
+}
+
+"""
+Updates application
+"""
+input AdminUpdateApplicationInput {
+  """
+  Client secrets - only relevant for flows that require a secret
+  """
+  clientId: String!
+
+  """
+  Client secrets - only relevant for flows that require a secret
+  """
+  clientSecret: String!
+
+  """
+  Application owner id
+  """
+  ownerId: Long
+
+  """
+  Client display name (used for logging and consent screen)
+  """
+  clientName: String!
+
+  """
+  Description of the client.
+  """
+  clientDescription: String
+
+  """
+  URI to further information about client (used on consent screen)
+  """
+  clientUri: URL
+
+  """
+  Specifies allowed URIs to return tokens or authorization codes to
+  """
+  redirectUris: [URL!]!
+
+  """
+  Client type ("public" or "confidential")
+  """
+  clientType: String!
+
+  """
+  Consent type ("implicit" or "explicit")
+  """
+  consentType: String!
+
+  """
+  Require Ellen4All consent
+  """
+  requirements: [String!]!
+  scopes: [String!]!
+}
+
+"""
+Admin namespace
+"""
+type AdminNamespaceType {
+  """
+  Dummy property
+  """
+  dummy: Boolean!
+  application(id: String!): AdminApplicationDetailsDto!
+  applications(
+    skip: Int
+    take: Int
+    query: String
+  ): ApplicationsCollectionSegment
+  users(
+    skip: Int
+    take: Int
+    where: AdminUserDtoFilterInput
+  ): UsersCollectionSegment
+  user(id: Int!): AdminUserDto
+  roles: [String!]!
+  scopes: AvailableScopesDto!
+  roleScopes: [AdminRoleScopeDto!]!
+  storeBooks: [AdminStoreItem!]!
+  storeBookHistory(id: Int!): [AdminBookPriceHistoryItem!]!
+  storePackages: [AdminStorePackageItem!]!
+}
+
+"""
+Update own application
+"""
+input UpdateOwnApplicationInput {
+  """
+  Client ID
+  """
+  clientId: String!
+
+  """
+  Client name
+  """
+  clientName: String!
+
+  """
+  Client URI
+  """
+  clientUri: URL
+
+  """
+  Description
+  """
+  description: String
+
+  """
+  List of redirect URIs
+  """
+  redirectUris: [URL!]!
+}
+
+"""
+Creates an OAuth application owned by the user.
+"""
+input CreateOwnApplicationInput {
+  """
+  Name
+  """
+  clientName: String!
+
+  """
+  Description
+  """
+  description: String
+
+  """
+  Client URI
+  """
+  clientUri: URL
+
+  """
+  List of redirect URIs
+  """
+  redirectUris: [URL!]!
 }
 
 """
@@ -1287,175 +1428,15 @@ type OAuthApplicationDescription {
   consentType: String!
 }
 
-type OpenIddictResponseDto {
-  accessToken: String
-  refreshToken: String
-  idToken: String
-  username: String
-  deviceId: String
-}
-
-input OpenIddictResponseDtoInput {
-  accessToken: String
-  refreshToken: String
-  idToken: String
-  username: String
-  deviceId: String
-}
-
 """
-Organization DTO
+The `DateTime` scalar represents an ISO-8601 compliant date time type.
 """
-type OrganizationDto {
-  """
-  Domain
-  """
-  domain: String!
+scalar DateTime @specifiedBy(url: "https://www.graphql-scalars.com/date-time")
 
-  """
-  Name
-  """
-  name: String!
-
-  """
-  Level
-  """
-  level: OrganizationLevel!
-
-  """
-  Parent id
-  """
-  parentId: String
-}
-
-"""
-Organization levels
-"""
-enum OrganizationLevel {
-  """
-  Conference level
-  """
-  CONFERENCE
-
-  """
-  Union level
-  """
-  UNION
-
-  """
-  Division level
-  """
-  DIVISION
-
-  """
-  Global / GC level
-  """
-  GLOBAL
-}
-
-type OrgCollectionSegmentOfOrgTranslationDto {
-  totalCount: Int!
-  items: [OrgTranslationDto!]!
-}
-
-type OrgCollectionSegmentOfOrgUserDto {
-  totalCount: Int!
-  items: [OrgUserDto!]!
-}
-
-enum OrgCreateUserActionEnum {
-  DO_NOTHING
-  SEND_SIGNUP_EMAIL
-  CREATE_USER
-  CREATE_USER_AND_SEND_PASSWORD_RESET_EMAIL
-}
-
-union OrgCreateUserError = ProblemDetailsError
-
-"""
-Create organization user input
-"""
-input OrgCreateUserInput {
-  """
-  User email
-  """
-  email: String!
-
-  """
-  User first name
-  """
-  firstName: String!
-
-  """
-  User last name
-  """
-  lastName: String!
-
-  """
-  User domain
-  """
-  domain: String
-}
-
-type OrgCreateUserPayload {
-  orgUserDto: OrgUserDto
-  errors: [OrgCreateUserError!]
-}
-
-union OrgCreateUserWizardError = ProblemDetailsError
-
-input OrgCreateUserWizardInput {
-  """
-  User email
-  """
-  email: String!
-
-  """
-  First name
-  """
-  firstName: String!
-
-  """
-  Last name
-  """
-  lastName: String!
-
-  """
-  Also create Control panel user
-  """
-  cpanelUserAction: OrgCreateUserActionEnum!
-
-  """
-  E4A Domain
-  """
-  domain: String
-
-  """
-  E4A Roles
-  """
-  roles: [String!]!
-}
-
-type OrgCreateUserWizardPayload {
-  int: Int
-  errors: [OrgCreateUserWizardError!]
-}
-
-union OrgDeleteUserError = ProblemDetailsError
-
-"""
-Organization user delete input
-"""
-input OrgDeleteUserInput {
-  """
-  User id
-  """
-  userId: Int!
-}
-
-type OrgDeleteUserPayload {
-  boolean: Boolean
-  errors: [OrgDeleteUserError!]
+type FacebookDto {
+  facebookId: String
+  facebookAccessToken: String
+  facebookExpireTime: DateTime
 }
 
 """
@@ -1558,8 +1539,6 @@ type OrgManagerNamespace {
   me: OrgUserDto
 }
 
-union OrgSendSignUpNotificationError = ProblemDetailsError
-
 input OrgSendSignUpNotificationInput {
   """
   Email address
@@ -1575,263 +1554,6 @@ input OrgSendSignUpNotificationInput {
   Last name
   """
   lastName: String!
-}
-
-type OrgSendSignUpNotificationPayload {
-  boolean: Boolean
-  errors: [OrgSendSignUpNotificationError!]
-}
-
-union OrgSetCpanelUserIdError = ProblemDetailsError
-
-"""
-Set cpanel user id
-"""
-input OrgSetCpanelUserIdInput {
-  """
-  User id
-  """
-  userId: Int!
-
-  """
-  Cpanel user id
-  """
-  cpanelUserId: Int!
-}
-
-type OrgSetCpanelUserIdPayload {
-  orgUserDto: OrgUserDto
-  errors: [OrgSetCpanelUserIdError!]
-}
-
-union OrgSetUserRolesError = ProblemDetailsError
-
-"""
-Set user roles
-"""
-input OrgSetUserRolesInput {
-  """
-  User id
-  """
-  userId: Int!
-
-  """
-  Roles
-  """
-  roles: [String!]!
-}
-
-type OrgSetUserRolesPayload {
-  boolean: Boolean
-  errors: [OrgSetUserRolesError!]
-}
-
-union OrgSetUserStatusError = ProblemDetailsError
-
-"""
-Input for setting user status
-"""
-input OrgSetUserStatusInput {
-  """
-  User id
-  """
-  userId: Int!
-
-  """
-  User status
-  """
-  status: Boolean!
-}
-
-type OrgSetUserStatusPayload {
-  orgUserDto: OrgUserDto
-  errors: [OrgSetUserStatusError!]
-}
-
-union OrgSetUserTranslationRoleError = ProblemDetailsError
-
-input OrgSetUserTranslationRoleInput {
-  userId: Int!
-  translationId: Int!
-  role: BookRoleEnum
-}
-
-type OrgSetUserTranslationRolePayload {
-  boolean: Boolean
-  errors: [OrgSetUserTranslationRoleError!]
-}
-
-"""
-Publication DTO
-"""
-type OrgTeamMemberDto {
-  """
-  Role
-  """
-  role: BookRoleEnum!
-
-  """
-  User ID
-  """
-  userId: Int!
-
-  """
-  User details
-  """
-  user: OrgTeamTranslationDtoUser
-}
-
-"""
-user email
-"""
-type OrgTeamTranslationDtoUser {
-  """
-  User email
-  """
-  email: String!
-}
-
-"""
-Translation DTO
-"""
-type OrgTranslationDto {
-  """
-  Translation ID
-  """
-  id: Int!
-
-  """
-  Translation code
-  """
-  code: String!
-
-  """
-  Translation title
-  """
-  title: String!
-
-  """
-  Translation domain
-  """
-  domain: String
-
-  """
-  Original publication
-  """
-  originalPublication: OrgTranslationDtoPublication!
-
-  """
-  Language
-  """
-  language: OrgTranslationDtoLanguage!
-
-  """
-  Team members
-  """
-  team: [OrgTeamMemberDto!]!
-}
-
-"""
-Language DTO
-"""
-type OrgTranslationDtoLanguage {
-  """
-  Language code
-  """
-  code: String!
-
-  """
-  Language title
-  """
-  title: String!
-}
-
-"""
-Publication DTO
-"""
-type OrgTranslationDtoPublication {
-  """
-  Translation id
-  """
-  id: Int!
-
-  """
-  Title of original publication
-  """
-  title: String!
-}
-
-"""
-Translation role DTO
-"""
-type OrgTranslationRoleDto {
-  """
-  Translation id
-  """
-  translationId: Int!
-
-  """
-  Translation details
-  """
-  translation: OrgTranslationRoleTranslationDto
-
-  """
-  Role
-  """
-  role: BookRoleEnum!
-}
-
-type OrgTranslationRoleLanguageDto {
-  code: String!
-}
-
-type OrgTranslationRolePublicationDto {
-  id: Int!
-  title: String!
-}
-
-type OrgTranslationRoleTranslationDto {
-  code: String!
-  title: String!
-  language: OrgTranslationRoleLanguageDto!
-  originalPublication: OrgTranslationRolePublicationDto!
-}
-
-union OrgUpdateUserError = ProblemDetailsError
-
-"""
-Update organization user input
-"""
-input OrgUpdateUserInput {
-  """
-  User id
-  """
-  userId: Int!
-
-  """
-  User email
-  """
-  email: String!
-
-  """
-  User first name
-  """
-  firstName: String!
-
-  """
-  User last name
-  """
-  lastName: String!
-
-  """
-  User domain
-  """
-  domain: String
-}
-
-type OrgUpdateUserPayload {
-  orgUserDto: OrgUserDto
-  errors: [OrgUpdateUserError!]
 }
 
 """
@@ -1905,95 +1627,141 @@ type OrgUserDto {
 }
 
 """
-Organization DTO
+Input for setting user status
 """
-type OrgUserDtoOrganization {
+input OrgSetUserStatusInput {
   """
-  Name
+  User id
   """
-  name: String!
+  userId: Int!
+
+  """
+  User status
+  """
+  status: Boolean!
 }
 
-type OrgUserE4aLinkStatus {
-  e4aUserId: Int
-  status: OrgUserStatus!
+"""
+Organization user delete input
+"""
+input OrgDeleteUserInput {
+  """
+  User id
+  """
+  userId: Int!
 }
 
 """
-Organization user role
+Update organization user input
 """
-type OrgUserRoleDto {
+input OrgUpdateUserInput {
   """
-  Role ID
+  User id
   """
-  id: String!
+  userId: Int!
 
   """
-  Role level
+  User email
   """
-  level: OrganizationLevel!
+  email: String!
 
   """
-  Role title
+  User first name
   """
-  title: String!
+  firstName: String!
 
   """
-  Role description
+  User last name
   """
-  description: String!
+  lastName: String!
 
   """
-  Role domain
+  User domain
   """
   domain: String
 }
 
-enum OrgUserStatus {
-  MISSING
-  EXISTING
-  CAN_BE_LINKED
+"""
+Create organization user input
+"""
+input OrgCreateUserInput {
+  """
+  User email
+  """
+  email: String!
+
+  """
+  User first name
+  """
+  firstName: String!
+
+  """
+  User last name
+  """
+  lastName: String!
+
+  """
+  User domain
+  """
+  domain: String
 }
 
 """
-Problem details error
+Set cpanel user id
 """
-type ProblemDetailsError implements Error {
+input OrgSetCpanelUserIdInput {
   """
-  HTTP-based status code
+  User id
   """
-  code: Int!
+  userId: Int!
 
   """
-  Exception message
+  Cpanel user id
   """
-  message: String!
-
-  """
-  Exception details
-  """
-  details: String
-
-  """
-  Custom errors
-  """
-  errors: [ErrorGroup!]
+  cpanelUserId: Int!
 }
 
 """
-profile details response
+Set user roles
 """
-type ProfileDetailsResponse {
+input OrgSetUserRolesInput {
   """
-  Id
+  User id
   """
-  id: Long!
+  userId: Int!
 
   """
-  User name
+  Roles
   """
-  userName: String!
+  roles: [String!]!
+}
 
+"""
+Book role enum
+"""
+enum BookRoleEnum {
+  """
+  Translator
+  """
+  TRANSLATOR
+
+  """
+  Editor
+  """
+  EDITOR
+
+  """
+  Reviewer
+  """
+  REVIEWER
+
+  """
+  Approver
+  """
+  APPROVER
+}
+
+input OrgCreateUserWizardInput {
   """
   User email
   """
@@ -2010,403 +1778,139 @@ type ProfileDetailsResponse {
   lastName: String!
 
   """
-  Phone
+  Also create Control panel user
   """
-  phone: String!
+  cpanelUserAction: OrgCreateUserActionEnum!
 
   """
-  Email is confirmed
+  E4A Domain
   """
-  emailIsConfirmed: Boolean!
+  domain: String
 
   """
-  Has password
-  """
-  hasPassword: Boolean!
-
-  """
-  Roles
+  E4A Roles
   """
   roles: [String!]!
 }
 
-"""
-Social application settings for a user.
-"""
-type SocialApplicationResponse {
-  """
-  Facebook app ID for the user.
-  """
-  facebookAppId: String!
-}
-
-enum SortEnumType {
-  ASC
-  DESC
-}
-
-input StringOperationFilterInput {
-  and: [StringOperationFilterInput!]
-  or: [StringOperationFilterInput!]
-  eq: String
-  neq: String
-  contains: String
-  ncontains: String
-  in: [String]
-  nin: [String]
-  startsWith: String
-  nstartsWith: String
-  endsWith: String
-  nendsWith: String
-}
-
-enum SubscriptionBookDtoBookType {
-  BOOK
-  DEVOTIONAL
-  BIBLE
-}
-
-"""
-Subscription book response.
-"""
-type SubscriptionBookResponse {
-  """
-  Book ID.
-  """
+type BookInPackageItem {
   bookId: Int!
-
-  """
-  Book type.
-  """
-  bookType: SubscriptionBookDtoBookType!
-
-  """
-  Language of the book.
-  """
-  language: String!
-
-  """
-  Title of the book.
-  """
-  title: String!
-
-  """
-  Number of chunks in the book.
-  """
-  chunks: Int!
-
-  """
-  Book is subscribed to.
-  """
-  subscribed: Boolean!
+  title: String
+  code: String
 }
 
-union SubscriptionCatchUpError = ProblemDetailsError
-
-input SubscriptionCatchUpInput {
-  id: Int!
+enum OrgUserStatus {
+  MISSING
+  EXISTING
+  CAN_BE_LINKED
 }
 
-type SubscriptionCatchUpPayload {
-  boolean: Boolean
-  errors: [SubscriptionCatchUpError!]
-}
-
-union SubscriptionCreateError = ProblemDetailsError
-
-input SubscriptionCreateInput {
-  bookId: Int!
-  startDate: DateTime!
-  startOrder: Int!
-  itemsPerDay: Int!
-  weekDays: String!
-  deliveryTime: TimeSpan!
-  deliveryMethods: [String!]!
-}
-
-type SubscriptionCreatePayload {
-  boolean: Boolean
-  errors: [SubscriptionCreateError!]
-}
-
-union SubscriptionDeleteError = ProblemDetailsError
-
-input SubscriptionDeleteInput {
-  id: Int!
-}
-
-type SubscriptionDeletePayload {
-  boolean: Boolean
-  errors: [SubscriptionDeleteError!]
-}
-
-union SubscriptionFacebookConnectError = ProblemDetailsError
-
-input SubscriptionFacebookConnectInput {
-  id: String!
-  accessToken: String!
-  expiresAt: DateTime!
-}
-
-type SubscriptionFacebookConnectPayload {
-  boolean: Boolean
-  errors: [SubscriptionFacebookConnectError!]
-}
-
-union SubscriptionFacebookDisconnectError = ProblemDetailsError
-
-type SubscriptionFacebookDisconnectPayload {
-  boolean: Boolean
-  errors: [SubscriptionFacebookDisconnectError!]
-}
-
-union SubscriptionPauseError = ProblemDetailsError
-
-input SubscriptionPauseInput {
-  id: Int!
-}
-
-type SubscriptionPausePayload {
-  boolean: Boolean
-  errors: [SubscriptionPauseError!]
+enum OrgCreateUserActionEnum {
+  DO_NOTHING
+  SEND_SIGNUP_EMAIL
+  CREATE_USER
+  CREATE_USER_AND_SEND_PASSWORD_RESET_EMAIL
 }
 
 """
-Subscription response.
+Organization DTO
 """
-type SubscriptionResponse {
+type OrgUserDtoOrganization {
   """
-  Subscription ID
-  """
-  id: Int!
-
-  """
-  Book information.
-  """
-  book: SubscriptionBookResponse!
-
-  """
-  Paused until
-  """
-  pausedUntil: DateTime
-
-  """
-  Start date of the subscription.
-  """
-  startDate: DateTime
-
-  """
-  End date of the subscription.
-  """
-  endDate: DateTime
-
-  """
-  Is the subscription active?
-  """
-  active: Boolean!
-
-  """
-  Start order of the subscription.
-  """
-  startOrder: Int!
-
-  """
-  Weekdays of the subscription.
-  """
-  weekdays: String!
-
-  """
-  Items per day of the subscription.
-  """
-  itemsPerDay: Float!
-
-  """
-  Delivery time of the subscription.
-  """
-  deliveryTime: TimeSpan!
-
-  """
-  List of delivery methods.
-  """
-  deliveryMethods: [String!]!
-}
-
-union SubscriptionResumeError = ProblemDetailsError
-
-input SubscriptionResumeInput {
-  id: Int!
-}
-
-type SubscriptionResumePayload {
-  boolean: Boolean
-  errors: [SubscriptionResumeError!]
-}
-
-union SubscriptionsSetDeliveryOptionsError = ProblemDetailsError
-
-input SubscriptionsSetDeliveryOptionsInput {
-  timeZone: String!
-  deliveryTime: TimeSpan!
-}
-
-type SubscriptionsSetDeliveryOptionsPayload {
-  boolean: Boolean
-  errors: [SubscriptionsSetDeliveryOptionsError!]
-}
-
-union SubscriptionsUpdateFeedError = ProblemDetailsError
-
-input SubscriptionsUpdateFeedInput {
-  feedId: Int!
-  isActive: Boolean!
-  deliveryMethods: [String!]!
-}
-
-type SubscriptionsUpdateFeedPayload {
-  boolean: Boolean
-  errors: [SubscriptionsUpdateFeedError!]
-}
-
-union SubscriptionUpdateError = ProblemDetailsError
-
-input SubscriptionUpdateInput {
-  id: Int!
-  itemsPerDay: Int!
-  weekDays: String!
-  deliveryTime: TimeSpan!
-  deliveryMethods: [String!]!
-}
-
-type SubscriptionUpdatePayload {
-  boolean: Boolean
-  errors: [SubscriptionUpdateError!]
-}
-
-"""
-The `TimeSpan` scalar represents an ISO-8601 compliant duration type.
-"""
-scalar TimeSpan
-
-"""
-Table of contents for a subscription.
-"""
-type TocResponse {
-  """
-  Order of the item in the table of contents.
-  """
-  order: Int!
-
-  """
-  Title of the item in the table of contents.
-  """
-  title: String!
-}
-
-union UpdateOwnApplicationError = ProblemDetailsError
-
-"""
-Update own application
-"""
-input UpdateOwnApplicationInput {
-  """
-  Client ID
-  """
-  clientId: String!
-
-  """
-  Client name
-  """
-  clientName: String!
-
-  """
-  Client URI
-  """
-  clientUri: URL
-
-  """
-  Description
-  """
-  description: String
-
-  """
-  List of redirect URIs
-  """
-  redirectUris: [URL!]!
-}
-
-type UpdateOwnApplicationPayload {
-  boolean: Boolean
-  errors: [UpdateOwnApplicationError!]
-}
-
-union UpdateRoleScopeError = ProblemDetailsError
-
-"""
-Updates a role scope
-"""
-input UpdateRoleScopeInput {
-  """
-  The name of the role scope to delete
+  Name
   """
   name: String!
-
-  """
-  New description for the role scope
-  """
-  description: String!
-}
-
-type UpdateRoleScopePayload {
-  boolean: Boolean
-  errors: [UpdateRoleScopeError!]
 }
 
 """
-Updates a user
+Translation role DTO
 """
-input UpdateUserCommandInput {
+type OrgTranslationRoleDto {
   """
-  The user id
+  Translation id
   """
-  userId: Int!
+  translationId: Int!
 
   """
-  Username
+  Translation details
   """
-  userName: String
+  translation: OrgTranslationRoleTranslationDto
 
   """
-  Email address
+  Role
   """
-  email: String
-
-  """
-  Email is confirmed
-  """
-  emailConfirmed: Boolean
-
-  """
-  Lockout enabled
-  """
-  lockoutEnabled: Boolean
-
-  """
-  First name
-  """
-  firstName: String
-
-  """
-  Last name
-  """
-  lastName: String
-
-  """
-  List of roles
-  """
-  roles: [String!]
+  role: BookRoleEnum!
 }
 
-scalar URL
+"""
+Organization levels
+"""
+enum OrganizationLevel {
+  """
+  Conference level
+  """
+  CONFERENCE
+
+  """
+  Union level
+  """
+  UNION
+
+  """
+  Division level
+  """
+  DIVISION
+
+  """
+  Global / GC level
+  """
+  GLOBAL
+}
+
+"""
+Translation DTO
+"""
+type OrgTranslationDto {
+  """
+  Translation ID
+  """
+  id: Int!
+
+  """
+  Translation code
+  """
+  code: String!
+
+  """
+  Translation title
+  """
+  title: String!
+
+  """
+  Translation domain
+  """
+  domain: String
+
+  """
+  Original publication
+  """
+  originalPublication: OrgTranslationDtoPublication!
+
+  """
+  Language
+  """
+  language: OrgTranslationDtoLanguage!
+
+  """
+  Team members
+  """
+  team: [OrgTeamMemberDto!]!
+}
+
+type OrgCollectionSegmentOfOrgTranslationDto {
+  totalCount: Int!
+  items: [OrgTranslationDto!]!
+}
 
 """
 User transfer object
@@ -2503,28 +2007,531 @@ input UserFilterInput {
   search: String
 }
 
+type OrgCollectionSegmentOfOrgUserDto {
+  totalCount: Int!
+  items: [OrgUserDto!]!
+}
+
 """
-User profile by email DTO
+Organization DTO
 """
-type UserProfileByEmailDto {
-  id: Long!
+type OrganizationDto {
+  """
+  Domain
+  """
+  domain: String!
+
+  """
+  Name
+  """
+  name: String!
+
+  """
+  Level
+  """
+  level: OrganizationLevel!
+
+  """
+  Parent id
+  """
+  parentId: String
+}
+
+"""
+Organization user role
+"""
+type OrgUserRoleDto {
+  """
+  Role ID
+  """
+  id: String!
+
+  """
+  Role level
+  """
+  level: OrganizationLevel!
+
+  """
+  Role title
+  """
+  title: String!
+
+  """
+  Role description
+  """
+  description: String!
+
+  """
+  Role domain
+  """
+  domain: String
+}
+
+enum FeedDtoFeedType {
+  NEWS
+  THOUGHT
+}
+
+enum SubscriptionBookDtoBookType {
+  BOOK
+  DEVOTIONAL
+  BIBLE
+}
+
+enum SortEnumType {
+  ASC
+  DESC
+}
+
+"""
+Publication DTO
+"""
+type OrgTeamMemberDto {
+  """
+  Role
+  """
+  role: BookRoleEnum!
+
+  """
+  User ID
+  """
+  userId: Int!
+
+  """
+  User details
+  """
+  user: OrgTeamTranslationDtoUser
+}
+
+"""
+Language DTO
+"""
+type OrgTranslationDtoLanguage {
+  """
+  Language code
+  """
+  code: String!
+
+  """
+  Language title
+  """
+  title: String!
+}
+
+"""
+Publication DTO
+"""
+type OrgTranslationDtoPublication {
+  """
+  Translation id
+  """
+  id: Int!
+
+  """
+  Title of original publication
+  """
+  title: String!
+}
+
+type OrgTranslationRoleTranslationDto {
+  code: String!
+  title: String!
+  language: OrgTranslationRoleLanguageDto!
+  originalPublication: OrgTranslationRolePublicationDto!
+}
+
+type OrgTranslationRolePublicationDto {
+  id: Int!
+  title: String!
+}
+
+type OrgTranslationRoleLanguageDto {
+  code: String!
+}
+
+"""
+user email
+"""
+type OrgTeamTranslationDtoUser {
+  """
+  User email
+  """
   email: String!
 }
 
-"""
-A segment of a collection.
-"""
-type UsersCollectionSegment {
-  """
-  Information to aid in pagination.
-  """
-  pageInfo: CollectionSegmentInfo!
+union CreateOwnApplicationError = ProblemDetailsError
 
-  """
-  A flattened list of the items.
-  """
-  items: [AdminUserDto!]
-  totalCount: Int!
+type CreateOwnApplicationPayload {
+  boolean: Boolean
+  errors: [CreateOwnApplicationError!]
 }
 
-scalar UUID
+input DeleteOwnApplicationInput {
+  """
+  Client ID
+  """
+  clientId: String!
+}
+
+union DeleteOwnApplicationError = ProblemDetailsError
+
+type DeleteOwnApplicationPayload {
+  boolean: Boolean
+  errors: [DeleteOwnApplicationError!]
+}
+
+union UpdateOwnApplicationError = ProblemDetailsError
+
+type UpdateOwnApplicationPayload {
+  boolean: Boolean
+  errors: [UpdateOwnApplicationError!]
+}
+
+union AdminUpdateApplicationError = ProblemDetailsError
+
+type AdminUpdateApplicationPayload {
+  adminApplicationDetailsDto: AdminApplicationDetailsDto
+  errors: [AdminUpdateApplicationError!]
+}
+
+input AdminDeleteApplicationInput {
+  clientId: String!
+}
+
+union AdminDeleteApplicationError = ProblemDetailsError
+
+type AdminDeleteApplicationPayload {
+  boolean: Boolean
+  errors: [AdminDeleteApplicationError!]
+}
+
+union CreateRoleScopeError = ProblemDetailsError
+
+type CreateRoleScopePayload {
+  boolean: Boolean
+  errors: [CreateRoleScopeError!]
+}
+
+union UpdateRoleScopeError = ProblemDetailsError
+
+type UpdateRoleScopePayload {
+  boolean: Boolean
+  errors: [UpdateRoleScopeError!]
+}
+
+union DeleteRoleScopeError = ProblemDetailsError
+
+type DeleteRoleScopePayload {
+  boolean: Boolean
+  errors: [DeleteRoleScopeError!]
+}
+
+union CreateScopedRoleError = ProblemDetailsError
+
+type CreateScopedRolePayload {
+  boolean: Boolean
+  errors: [CreateScopedRoleError!]
+}
+
+union DeleteScopedRoleError = ProblemDetailsError
+
+type DeleteScopedRolePayload {
+  boolean: Boolean
+  errors: [DeleteScopedRoleError!]
+}
+
+input AdminUpdateUserInput {
+  payload: UpdateUserCommandInput!
+}
+
+union AdminUpdateUserError = ProblemDetailsError
+
+type AdminUpdateUserPayload {
+  boolean: Boolean
+  errors: [AdminUpdateUserError!]
+}
+
+input AdminSetUserPasswordInput {
+  userId: Int!
+  password: String!
+}
+
+union AdminSetUserPasswordError = ProblemDetailsError
+
+type AdminSetUserPasswordPayload {
+  boolean: Boolean
+  errors: [AdminSetUserPasswordError!]
+}
+
+input AdminGenerateTokenInput {
+  userId: Int!
+  expiresIn: Int!
+  roles: [String!]
+  scopes: [String!]!
+}
+
+union AdminGenerateTokenError = ProblemDetailsError
+
+type AdminGenerateTokenPayload {
+  generatedTokenDto: GeneratedTokenDto
+  errors: [AdminGenerateTokenError!]
+}
+
+input AdminPackageCreateInput {
+  payload: AddPackageRequestInput!
+}
+
+union AdminPackageCreateError = ProblemDetailsError
+
+type AdminPackageCreatePayload {
+  boolean: Boolean
+  errors: [AdminPackageCreateError!]
+}
+
+input AdminPackageUpdateInput {
+  payload: EditPackageRequestInput!
+}
+
+union AdminPackageUpdateError = ProblemDetailsError
+
+type AdminPackageUpdatePayload {
+  boolean: Boolean
+  errors: [AdminPackageUpdateError!]
+}
+
+input AdminPackageDeleteInput {
+  id: UUID!
+}
+
+union AdminPackageDeleteError = ProblemDetailsError
+
+type AdminPackageDeletePayload {
+  boolean: Boolean
+  errors: [AdminPackageDeleteError!]
+}
+
+input AdminStoreBookDeleteInput {
+  id: UUID!
+}
+
+union AdminStoreBookDeleteError = ProblemDetailsError
+
+type AdminStoreBookDeletePayload {
+  boolean: Boolean
+  errors: [AdminStoreBookDeleteError!]
+}
+
+input AdminSetBookPriceInput {
+  bookId: Int!
+  order: Int!
+  price: Float!
+  fullPrice: Float!
+}
+
+union AdminSetBookPriceError = ProblemDetailsError
+
+type AdminSetBookPricePayload {
+  boolean: Boolean
+  errors: [AdminSetBookPriceError!]
+}
+
+input AddDeviceInput {
+  request: DeviceCodeSubscriptionDtoInput!
+}
+
+union AddDeviceError = ProblemDetailsError
+
+type AddDevicePayload {
+  deviceCodeSubscriptionDto: DeviceCodeSubscriptionDto
+  errors: [AddDeviceError!]
+}
+
+input SubscriptionsSetDeliveryOptionsInput {
+  timeZone: String!
+  deliveryTime: TimeSpan!
+}
+
+union SubscriptionsSetDeliveryOptionsError = ProblemDetailsError
+
+type SubscriptionsSetDeliveryOptionsPayload {
+  boolean: Boolean
+  errors: [SubscriptionsSetDeliveryOptionsError!]
+}
+
+input SubscriptionsUpdateFeedInput {
+  feedId: Int!
+  isActive: Boolean!
+  deliveryMethods: [String!]!
+}
+
+union SubscriptionsUpdateFeedError = ProblemDetailsError
+
+type SubscriptionsUpdateFeedPayload {
+  boolean: Boolean
+  errors: [SubscriptionsUpdateFeedError!]
+}
+
+input SubscriptionPauseInput {
+  id: Int!
+}
+
+union SubscriptionPauseError = ProblemDetailsError
+
+type SubscriptionPausePayload {
+  boolean: Boolean
+  errors: [SubscriptionPauseError!]
+}
+
+input SubscriptionResumeInput {
+  id: Int!
+}
+
+union SubscriptionResumeError = ProblemDetailsError
+
+type SubscriptionResumePayload {
+  boolean: Boolean
+  errors: [SubscriptionResumeError!]
+}
+
+input SubscriptionDeleteInput {
+  id: Int!
+}
+
+union SubscriptionDeleteError = ProblemDetailsError
+
+type SubscriptionDeletePayload {
+  boolean: Boolean
+  errors: [SubscriptionDeleteError!]
+}
+
+input SubscriptionCatchUpInput {
+  id: Int!
+}
+
+union SubscriptionCatchUpError = ProblemDetailsError
+
+type SubscriptionCatchUpPayload {
+  boolean: Boolean
+  errors: [SubscriptionCatchUpError!]
+}
+
+input SubscriptionUpdateInput {
+  id: Int!
+  itemsPerDay: Int!
+  weekDays: String!
+  deliveryTime: TimeSpan!
+  deliveryMethods: [String!]!
+}
+
+union SubscriptionUpdateError = ProblemDetailsError
+
+type SubscriptionUpdatePayload {
+  boolean: Boolean
+  errors: [SubscriptionUpdateError!]
+}
+
+input SubscriptionCreateInput {
+  bookId: Int!
+  startDate: DateTime!
+  startOrder: Int!
+  itemsPerDay: Int!
+  weekDays: String!
+  deliveryTime: TimeSpan!
+  deliveryMethods: [String!]!
+}
+
+union SubscriptionCreateError = ProblemDetailsError
+
+type SubscriptionCreatePayload {
+  boolean: Boolean
+  errors: [SubscriptionCreateError!]
+}
+
+input SubscriptionFacebookConnectInput {
+  id: String!
+  accessToken: String!
+  expiresAt: DateTime!
+}
+
+union SubscriptionFacebookConnectError = ProblemDetailsError
+
+type SubscriptionFacebookConnectPayload {
+  boolean: Boolean
+  errors: [SubscriptionFacebookConnectError!]
+}
+
+union SubscriptionFacebookDisconnectError = ProblemDetailsError
+
+type SubscriptionFacebookDisconnectPayload {
+  boolean: Boolean
+  errors: [SubscriptionFacebookDisconnectError!]
+}
+
+union OrgSendSignUpNotificationError = ProblemDetailsError
+
+type OrgSendSignUpNotificationPayload {
+  boolean: Boolean
+  errors: [OrgSendSignUpNotificationError!]
+}
+
+union OrgSetUserStatusError = ProblemDetailsError
+
+type OrgSetUserStatusPayload {
+  orgUserDto: OrgUserDto
+  errors: [OrgSetUserStatusError!]
+}
+
+union OrgDeleteUserError = ProblemDetailsError
+
+type OrgDeleteUserPayload {
+  boolean: Boolean
+  errors: [OrgDeleteUserError!]
+}
+
+union OrgUpdateUserError = ProblemDetailsError
+
+type OrgUpdateUserPayload {
+  orgUserDto: OrgUserDto
+  errors: [OrgUpdateUserError!]
+}
+
+union OrgCreateUserError = ProblemDetailsError
+
+type OrgCreateUserPayload {
+  orgUserDto: OrgUserDto
+  errors: [OrgCreateUserError!]
+}
+
+union OrgSetCpanelUserIdError = ProblemDetailsError
+
+type OrgSetCpanelUserIdPayload {
+  orgUserDto: OrgUserDto
+  errors: [OrgSetCpanelUserIdError!]
+}
+
+union OrgSetUserRolesError = ProblemDetailsError
+
+type OrgSetUserRolesPayload {
+  boolean: Boolean
+  errors: [OrgSetUserRolesError!]
+}
+
+input OrgSetUserTranslationRoleInput {
+  userId: Int!
+  translationId: Int!
+  role: BookRoleEnum
+}
+
+union OrgSetUserTranslationRoleError = ProblemDetailsError
+
+type OrgSetUserTranslationRolePayload {
+  boolean: Boolean
+  errors: [OrgSetUserTranslationRoleError!]
+}
+
+union OrgCreateUserWizardError = ProblemDetailsError
+
+type OrgCreateUserWizardPayload {
+  int: Int
+  errors: [OrgCreateUserWizardError!]
+}

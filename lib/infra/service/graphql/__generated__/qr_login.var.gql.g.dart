@@ -19,12 +19,17 @@ class _$GDeviceAuthVarsSerializer
   final String wireName = 'GDeviceAuthVars';
 
   @override
-  Iterable<Object?> serialize(Serializers serializers, GDeviceAuthVars object,
-      {FullType specifiedType = FullType.unspecified}) {
+  Iterable<Object?> serialize(
+    Serializers serializers,
+    GDeviceAuthVars object, {
+    FullType specifiedType = FullType.unspecified,
+  }) {
     final result = <Object?>[
       'deviceId',
-      serializers.serialize(object.deviceId,
-          specifiedType: const FullType(String)),
+      serializers.serialize(
+        object.deviceId,
+        specifiedType: const FullType(String),
+      ),
     ];
 
     return result;
@@ -32,8 +37,10 @@ class _$GDeviceAuthVarsSerializer
 
   @override
   GDeviceAuthVars deserialize(
-      Serializers serializers, Iterable<Object?> serialized,
-      {FullType specifiedType = FullType.unspecified}) {
+    Serializers serializers,
+    Iterable<Object?> serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) {
     final result = GDeviceAuthVarsBuilder();
 
     final iterator = serialized.iterator;
@@ -43,8 +50,12 @@ class _$GDeviceAuthVarsSerializer
       final Object? value = iterator.current;
       switch (key) {
         case 'deviceId':
-          result.deviceId = serializers.deserialize(value,
-              specifiedType: const FullType(String))! as String;
+          result.deviceId =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )!
+                  as String;
           break;
       }
     }
@@ -61,34 +72,46 @@ class _$GaddDeviceVarsSerializer
   final String wireName = 'GaddDeviceVars';
 
   @override
-  Iterable<Object?> serialize(Serializers serializers, GaddDeviceVars object,
-      {FullType specifiedType = FullType.unspecified}) {
+  Iterable<Object?> serialize(
+    Serializers serializers,
+    GaddDeviceVars object, {
+    FullType specifiedType = FullType.unspecified,
+  }) {
     final result = <Object?>[
       'accessToken',
-      serializers.serialize(object.accessToken,
-          specifiedType: const FullType(String)),
+      serializers.serialize(
+        object.accessToken,
+        specifiedType: const FullType(String),
+      ),
       'refreshToken',
-      serializers.serialize(object.refreshToken,
-          specifiedType: const FullType(String)),
+      serializers.serialize(
+        object.refreshToken,
+        specifiedType: const FullType(String),
+      ),
       'deviceId',
-      serializers.serialize(object.deviceId,
-          specifiedType: const FullType(String)),
+      serializers.serialize(
+        object.deviceId,
+        specifiedType: const FullType(String),
+      ),
     ];
     Object? value;
     value = object.username;
     if (value != null) {
       result
         ..add('username')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
+        ..add(
+          serializers.serialize(value, specifiedType: const FullType(String)),
+        );
     }
     return result;
   }
 
   @override
   GaddDeviceVars deserialize(
-      Serializers serializers, Iterable<Object?> serialized,
-      {FullType specifiedType = FullType.unspecified}) {
+    Serializers serializers,
+    Iterable<Object?> serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) {
     final result = GaddDeviceVarsBuilder();
 
     final iterator = serialized.iterator;
@@ -98,20 +121,36 @@ class _$GaddDeviceVarsSerializer
       final Object? value = iterator.current;
       switch (key) {
         case 'accessToken':
-          result.accessToken = serializers.deserialize(value,
-              specifiedType: const FullType(String))! as String;
+          result.accessToken =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )!
+                  as String;
           break;
         case 'refreshToken':
-          result.refreshToken = serializers.deserialize(value,
-              specifiedType: const FullType(String))! as String;
+          result.refreshToken =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )!
+                  as String;
           break;
         case 'username':
-          result.username = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
+          result.username =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String?;
           break;
         case 'deviceId':
-          result.deviceId = serializers.deserialize(value,
-              specifiedType: const FullType(String))! as String;
+          result.deviceId =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )!
+                  as String;
           break;
       }
     }
@@ -151,9 +190,9 @@ class _$GDeviceAuthVars extends GDeviceAuthVars {
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper(r'GDeviceAuthVars')
-          ..add('deviceId', deviceId))
-        .toString();
+    return (newBuiltValueToStringHelper(
+      r'GDeviceAuthVars',
+    )..add('deviceId', deviceId)).toString();
   }
 }
 
@@ -190,10 +229,14 @@ class GDeviceAuthVarsBuilder
   GDeviceAuthVars build() => _build();
 
   _$GDeviceAuthVars _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         _$GDeviceAuthVars._(
           deviceId: BuiltValueNullFieldError.checkNotNull(
-              deviceId, r'GDeviceAuthVars', 'deviceId'),
+            deviceId,
+            r'GDeviceAuthVars',
+            'deviceId',
+          ),
         );
     replace(_$result);
     return _$result;
@@ -213,12 +256,12 @@ class _$GaddDeviceVars extends GaddDeviceVars {
   factory _$GaddDeviceVars([void Function(GaddDeviceVarsBuilder)? updates]) =>
       (GaddDeviceVarsBuilder()..update(updates))._build();
 
-  _$GaddDeviceVars._(
-      {required this.accessToken,
-      required this.refreshToken,
-      this.username,
-      required this.deviceId})
-      : super._();
+  _$GaddDeviceVars._({
+    required this.accessToken,
+    required this.refreshToken,
+    this.username,
+    required this.deviceId,
+  }) : super._();
   @override
   GaddDeviceVars rebuild(void Function(GaddDeviceVarsBuilder) updates) =>
       (toBuilder()..update(updates)).build();
@@ -306,15 +349,25 @@ class GaddDeviceVarsBuilder
   GaddDeviceVars build() => _build();
 
   _$GaddDeviceVars _build() {
-    final _$result = _$v ??
+    final _$result =
+        _$v ??
         _$GaddDeviceVars._(
           accessToken: BuiltValueNullFieldError.checkNotNull(
-              accessToken, r'GaddDeviceVars', 'accessToken'),
+            accessToken,
+            r'GaddDeviceVars',
+            'accessToken',
+          ),
           refreshToken: BuiltValueNullFieldError.checkNotNull(
-              refreshToken, r'GaddDeviceVars', 'refreshToken'),
+            refreshToken,
+            r'GaddDeviceVars',
+            'refreshToken',
+          ),
           username: username,
           deviceId: BuiltValueNullFieldError.checkNotNull(
-              deviceId, r'GaddDeviceVars', 'deviceId'),
+            deviceId,
+            r'GaddDeviceVars',
+            'deviceId',
+          ),
         );
     replace(_$result);
     return _$result;

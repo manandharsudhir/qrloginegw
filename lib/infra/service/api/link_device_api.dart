@@ -26,28 +26,30 @@ class LinkDeviceApi {
           )
           .listen(
             (result) async {
-              log("✅ Received data: ${result.data}");
+              if (result.data != null) {
+                log("✅ Received data: ${result.data}");
 
-              if (result.hasErrors) {
-                log("❌ GraphQL Errors: ${result.graphqlErrors}");
-                completer.completeError("GraphQL Errors");
-              }
-
-              final token = result.data?.deviceAuth?.accessToken;
-              final refreshToken = result.data?.deviceAuth?.refreshToken;
-              if (token != null) {
-                log("🔑 Access Token: $token");
-
-                if (!completer.isCompleted) {
-                  completer.complete(
-                    LinkDeviceSuccessModel(
-                      accessToken: token,
-                      refreshToken: refreshToken ?? "",
-                    ),
-                  );
+                if (result.hasErrors) {
+                  log("❌ GraphQL Errors: ${result.graphqlErrors}");
+                  completer.completeError("GraphQL Errors");
                 }
-              } else {
-                completer.complete(null);
+
+                final token = result.data?.deviceAuth.accessToken;
+                final refreshToken = result.data?.deviceAuth.refreshToken;
+                if (token != null) {
+                  log("🔑 Access Token: $token");
+
+                  if (!completer.isCompleted) {
+                    completer.complete(
+                      LinkDeviceSuccessModel(
+                        accessToken: token,
+                        refreshToken: refreshToken ?? "",
+                      ),
+                    );
+                  }
+                } else {
+                  completer.complete(null);
+                }
               }
             },
             onError: (e) {
@@ -93,7 +95,7 @@ class LinkDeviceApi {
           })
           .first;
 
-      if (res?.addDevice.openIddictResponseDto?.deviceId != null) {
+      if (res?.addDevice.deviceCodeSubscriptionDto?.deviceId != null) {
         return true;
       } else {
         return false;

@@ -8,13 +8,16 @@ subscription DeviceAuth($deviceId: String!) {
   }
 }
 
+
+
+
 mutation addDevice(
   $accessToken: String!
   $refreshToken: String!
   $username: String
   $deviceId: String!
 ) {
-  addDevice(
+ addDevice(
     input: {
       request: {
         accessToken: $accessToken
@@ -24,9 +27,19 @@ mutation addDevice(
       }
     }
   ) {
-    openIddictResponseDto {
-      idToken
+    deviceCodeSubscriptionDto {
+      accessToken
       deviceId
+      idToken
+      refreshToken
+      username
+    }
+    errors {
+      ... on ProblemDetailsError {
+        code
+        details
+        message
+      }
     }
   }
 }

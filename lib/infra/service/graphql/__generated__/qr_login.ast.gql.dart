@@ -151,13 +151,13 @@ const addDevice = _i1.OperationDefinitionNode(
       directives: [],
       selectionSet: _i1.SelectionSetNode(selections: [
         _i1.FieldNode(
-          name: _i1.NameNode(value: 'openIddictResponseDto'),
+          name: _i1.NameNode(value: 'deviceCodeSubscriptionDto'),
           alias: null,
           arguments: [],
           directives: [],
           selectionSet: _i1.SelectionSetNode(selections: [
             _i1.FieldNode(
-              name: _i1.NameNode(value: 'idToken'),
+              name: _i1.NameNode(value: 'accessToken'),
               alias: null,
               arguments: [],
               directives: [],
@@ -170,8 +170,68 @@ const addDevice = _i1.OperationDefinitionNode(
               directives: [],
               selectionSet: null,
             ),
+            _i1.FieldNode(
+              name: _i1.NameNode(value: 'idToken'),
+              alias: null,
+              arguments: [],
+              directives: [],
+              selectionSet: null,
+            ),
+            _i1.FieldNode(
+              name: _i1.NameNode(value: 'refreshToken'),
+              alias: null,
+              arguments: [],
+              directives: [],
+              selectionSet: null,
+            ),
+            _i1.FieldNode(
+              name: _i1.NameNode(value: 'username'),
+              alias: null,
+              arguments: [],
+              directives: [],
+              selectionSet: null,
+            ),
           ]),
-        )
+        ),
+        _i1.FieldNode(
+          name: _i1.NameNode(value: 'errors'),
+          alias: null,
+          arguments: [],
+          directives: [],
+          selectionSet: _i1.SelectionSetNode(selections: [
+            _i1.InlineFragmentNode(
+              typeCondition: _i1.TypeConditionNode(
+                  on: _i1.NamedTypeNode(
+                name: _i1.NameNode(value: 'ProblemDetailsError'),
+                isNonNull: false,
+              )),
+              directives: [],
+              selectionSet: _i1.SelectionSetNode(selections: [
+                _i1.FieldNode(
+                  name: _i1.NameNode(value: 'code'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null,
+                ),
+                _i1.FieldNode(
+                  name: _i1.NameNode(value: 'details'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null,
+                ),
+                _i1.FieldNode(
+                  name: _i1.NameNode(value: 'message'),
+                  alias: null,
+                  arguments: [],
+                  directives: [],
+                  selectionSet: null,
+                ),
+              ]),
+            )
+          ]),
+        ),
       ]),
     )
   ]),

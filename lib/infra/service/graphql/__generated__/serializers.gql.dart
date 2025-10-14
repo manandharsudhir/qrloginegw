@@ -9,11 +9,14 @@ import 'package:gql_code_builder_serializers/gql_code_builder_serializers.dart'
     show OperationSerializer;
 import 'package:qrlogin/infra/service/graphql/__generated__/qr_login.data.gql.dart'
     show
+        GaddDeviceData_addDevice_errors,
         GDeviceAuthData,
         GDeviceAuthData_deviceAuth,
         GaddDeviceData,
         GaddDeviceData_addDevice,
-        GaddDeviceData_addDevice_openIddictResponseDto;
+        GaddDeviceData_addDevice_deviceCodeSubscriptionDto,
+        GaddDeviceData_addDevice_errors__asProblemDetailsError,
+        GaddDeviceData_addDevice_errors__base;
 import 'package:qrlogin/infra/service/graphql/__generated__/qr_login.req.gql.dart'
     show GDeviceAuthReq, GaddDeviceReq;
 import 'package:qrlogin/infra/service/graphql/__generated__/qr_login.var.gql.dart'
@@ -43,10 +46,10 @@ import 'package:qrlogin/infra/service/graphql/__generated__/schema.schema.gql.da
         GDeleteOwnApplicationInput,
         GDeleteRoleScopeInput,
         GDeleteScopedRoleInput,
+        GDeviceCodeSubscriptionDtoInput,
         GEditPackageRequestInput,
         GFeedDtoFeedType,
         GLongOperationFilterInput,
-        GOpenIddictResponseDtoInput,
         GOrgCreateUserActionEnum,
         GOrgCreateUserInput,
         GOrgCreateUserWizardInput,
@@ -84,6 +87,7 @@ part 'serializers.gql.g.dart';
 
 final SerializersBuilder _serializersBuilder = _$serializers.toBuilder()
   ..add(OperationSerializer())
+  ..add(GaddDeviceData_addDevice_errors.serializer)
   ..addPlugin(StandardJsonPlugin());
 @SerializersFor([
   GAddDeviceInput,
@@ -113,10 +117,10 @@ final SerializersBuilder _serializersBuilder = _$serializers.toBuilder()
   GDeviceAuthData_deviceAuth,
   GDeviceAuthReq,
   GDeviceAuthVars,
+  GDeviceCodeSubscriptionDtoInput,
   GEditPackageRequestInput,
   GFeedDtoFeedType,
   GLongOperationFilterInput,
-  GOpenIddictResponseDtoInput,
   GOrgCreateUserActionEnum,
   GOrgCreateUserInput,
   GOrgCreateUserWizardInput,
@@ -151,7 +155,9 @@ final SerializersBuilder _serializersBuilder = _$serializers.toBuilder()
   GUserFilterInput,
   GaddDeviceData,
   GaddDeviceData_addDevice,
-  GaddDeviceData_addDevice_openIddictResponseDto,
+  GaddDeviceData_addDevice_deviceCodeSubscriptionDto,
+  GaddDeviceData_addDevice_errors__asProblemDetailsError,
+  GaddDeviceData_addDevice_errors__base,
   GaddDeviceReq,
   GaddDeviceVars,
 ])

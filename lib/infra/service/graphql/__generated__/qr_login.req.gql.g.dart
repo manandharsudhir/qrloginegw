@@ -19,63 +19,90 @@ class _$GDeviceAuthReqSerializer
   final String wireName = 'GDeviceAuthReq';
 
   @override
-  Iterable<Object?> serialize(Serializers serializers, GDeviceAuthReq object,
-      {FullType specifiedType = FullType.unspecified}) {
+  Iterable<Object?> serialize(
+    Serializers serializers,
+    GDeviceAuthReq object, {
+    FullType specifiedType = FullType.unspecified,
+  }) {
     final result = <Object?>[
       'vars',
-      serializers.serialize(object.vars,
-          specifiedType: const FullType(_i3.GDeviceAuthVars)),
+      serializers.serialize(
+        object.vars,
+        specifiedType: const FullType(_i3.GDeviceAuthVars),
+      ),
       'operation',
-      serializers.serialize(object.operation,
-          specifiedType: const FullType(_i4.Operation)),
+      serializers.serialize(
+        object.operation,
+        specifiedType: const FullType(_i4.Operation),
+      ),
       'executeOnListen',
-      serializers.serialize(object.executeOnListen,
-          specifiedType: const FullType(bool)),
+      serializers.serialize(
+        object.executeOnListen,
+        specifiedType: const FullType(bool),
+      ),
     ];
     Object? value;
     value = object.requestId;
     if (value != null) {
       result
         ..add('requestId')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
+        ..add(
+          serializers.serialize(value, specifiedType: const FullType(String)),
+        );
     }
     value = object.optimisticResponse;
     if (value != null) {
       result
         ..add('optimisticResponse')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(_i2.GDeviceAuthData)));
+        ..add(
+          serializers.serialize(
+            value,
+            specifiedType: const FullType(_i2.GDeviceAuthData),
+          ),
+        );
     }
     value = object.updateCacheHandlerKey;
     if (value != null) {
       result
         ..add('updateCacheHandlerKey')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
+        ..add(
+          serializers.serialize(value, specifiedType: const FullType(String)),
+        );
     }
     value = object.updateCacheHandlerContext;
     if (value != null) {
       result
         ..add('updateCacheHandlerContext')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(
-                Map, const [const FullType(String), const FullType(dynamic)])));
+        ..add(
+          serializers.serialize(
+            value,
+            specifiedType: const FullType(Map, const [
+              const FullType(String),
+              const FullType(dynamic),
+            ]),
+          ),
+        );
     }
     value = object.fetchPolicy;
     if (value != null) {
       result
         ..add('fetchPolicy')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(_i1.FetchPolicy)));
+        ..add(
+          serializers.serialize(
+            value,
+            specifiedType: const FullType(_i1.FetchPolicy),
+          ),
+        );
     }
     return result;
   }
 
   @override
   GDeviceAuthReq deserialize(
-      Serializers serializers, Iterable<Object?> serialized,
-      {FullType specifiedType = FullType.unspecified}) {
+    Serializers serializers,
+    Iterable<Object?> serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) {
     final result = GDeviceAuthReqBuilder();
 
     final iterator = serialized.iterator;
@@ -85,42 +112,73 @@ class _$GDeviceAuthReqSerializer
       final Object? value = iterator.current;
       switch (key) {
         case 'vars':
-          result.vars.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(_i3.GDeviceAuthVars))!
-              as _i3.GDeviceAuthVars);
+          result.vars.replace(
+            serializers.deserialize(
+                  value,
+                  specifiedType: const FullType(_i3.GDeviceAuthVars),
+                )!
+                as _i3.GDeviceAuthVars,
+          );
           break;
         case 'operation':
-          result.operation = serializers.deserialize(value,
-              specifiedType: const FullType(_i4.Operation))! as _i4.Operation;
+          result.operation =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(_i4.Operation),
+                  )!
+                  as _i4.Operation;
           break;
         case 'requestId':
-          result.requestId = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
+          result.requestId =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String?;
           break;
         case 'optimisticResponse':
-          result.optimisticResponse.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(_i2.GDeviceAuthData))!
-              as _i2.GDeviceAuthData);
+          result.optimisticResponse.replace(
+            serializers.deserialize(
+                  value,
+                  specifiedType: const FullType(_i2.GDeviceAuthData),
+                )!
+                as _i2.GDeviceAuthData,
+          );
           break;
         case 'updateCacheHandlerKey':
-          result.updateCacheHandlerKey = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
+          result.updateCacheHandlerKey =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String?;
           break;
         case 'updateCacheHandlerContext':
-          result.updateCacheHandlerContext = serializers.deserialize(value,
-              specifiedType: const FullType(Map, const [
-                const FullType(String),
-                const FullType(dynamic)
-              ])) as Map<String, dynamic>?;
+          result.updateCacheHandlerContext =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(Map, const [
+                      const FullType(String),
+                      const FullType(dynamic),
+                    ]),
+                  )
+                  as Map<String, dynamic>?;
           break;
         case 'fetchPolicy':
-          result.fetchPolicy = serializers.deserialize(value,
-                  specifiedType: const FullType(_i1.FetchPolicy))
-              as _i1.FetchPolicy?;
+          result.fetchPolicy =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(_i1.FetchPolicy),
+                  )
+                  as _i1.FetchPolicy?;
           break;
         case 'executeOnListen':
-          result.executeOnListen = serializers.deserialize(value,
-              specifiedType: const FullType(bool))! as bool;
+          result.executeOnListen =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )!
+                  as bool;
           break;
       }
     }
@@ -136,63 +194,90 @@ class _$GaddDeviceReqSerializer implements StructuredSerializer<GaddDeviceReq> {
   final String wireName = 'GaddDeviceReq';
 
   @override
-  Iterable<Object?> serialize(Serializers serializers, GaddDeviceReq object,
-      {FullType specifiedType = FullType.unspecified}) {
+  Iterable<Object?> serialize(
+    Serializers serializers,
+    GaddDeviceReq object, {
+    FullType specifiedType = FullType.unspecified,
+  }) {
     final result = <Object?>[
       'vars',
-      serializers.serialize(object.vars,
-          specifiedType: const FullType(_i3.GaddDeviceVars)),
+      serializers.serialize(
+        object.vars,
+        specifiedType: const FullType(_i3.GaddDeviceVars),
+      ),
       'operation',
-      serializers.serialize(object.operation,
-          specifiedType: const FullType(_i4.Operation)),
+      serializers.serialize(
+        object.operation,
+        specifiedType: const FullType(_i4.Operation),
+      ),
       'executeOnListen',
-      serializers.serialize(object.executeOnListen,
-          specifiedType: const FullType(bool)),
+      serializers.serialize(
+        object.executeOnListen,
+        specifiedType: const FullType(bool),
+      ),
     ];
     Object? value;
     value = object.requestId;
     if (value != null) {
       result
         ..add('requestId')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
+        ..add(
+          serializers.serialize(value, specifiedType: const FullType(String)),
+        );
     }
     value = object.optimisticResponse;
     if (value != null) {
       result
         ..add('optimisticResponse')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(_i2.GaddDeviceData)));
+        ..add(
+          serializers.serialize(
+            value,
+            specifiedType: const FullType(_i2.GaddDeviceData),
+          ),
+        );
     }
     value = object.updateCacheHandlerKey;
     if (value != null) {
       result
         ..add('updateCacheHandlerKey')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(String)));
+        ..add(
+          serializers.serialize(value, specifiedType: const FullType(String)),
+        );
     }
     value = object.updateCacheHandlerContext;
     if (value != null) {
       result
         ..add('updateCacheHandlerContext')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(
-                Map, const [const FullType(String), const FullType(dynamic)])));
+        ..add(
+          serializers.serialize(
+            value,
+            specifiedType: const FullType(Map, const [
+              const FullType(String),
+              const FullType(dynamic),
+            ]),
+          ),
+        );
     }
     value = object.fetchPolicy;
     if (value != null) {
       result
         ..add('fetchPolicy')
-        ..add(serializers.serialize(value,
-            specifiedType: const FullType(_i1.FetchPolicy)));
+        ..add(
+          serializers.serialize(
+            value,
+            specifiedType: const FullType(_i1.FetchPolicy),
+          ),
+        );
     }
     return result;
   }
 
   @override
   GaddDeviceReq deserialize(
-      Serializers serializers, Iterable<Object?> serialized,
-      {FullType specifiedType = FullType.unspecified}) {
+    Serializers serializers,
+    Iterable<Object?> serialized, {
+    FullType specifiedType = FullType.unspecified,
+  }) {
     final result = GaddDeviceReqBuilder();
 
     final iterator = serialized.iterator;
@@ -202,42 +287,73 @@ class _$GaddDeviceReqSerializer implements StructuredSerializer<GaddDeviceReq> {
       final Object? value = iterator.current;
       switch (key) {
         case 'vars':
-          result.vars.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(_i3.GaddDeviceVars))!
-              as _i3.GaddDeviceVars);
+          result.vars.replace(
+            serializers.deserialize(
+                  value,
+                  specifiedType: const FullType(_i3.GaddDeviceVars),
+                )!
+                as _i3.GaddDeviceVars,
+          );
           break;
         case 'operation':
-          result.operation = serializers.deserialize(value,
-              specifiedType: const FullType(_i4.Operation))! as _i4.Operation;
+          result.operation =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(_i4.Operation),
+                  )!
+                  as _i4.Operation;
           break;
         case 'requestId':
-          result.requestId = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
+          result.requestId =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String?;
           break;
         case 'optimisticResponse':
-          result.optimisticResponse.replace(serializers.deserialize(value,
-                  specifiedType: const FullType(_i2.GaddDeviceData))!
-              as _i2.GaddDeviceData);
+          result.optimisticResponse.replace(
+            serializers.deserialize(
+                  value,
+                  specifiedType: const FullType(_i2.GaddDeviceData),
+                )!
+                as _i2.GaddDeviceData,
+          );
           break;
         case 'updateCacheHandlerKey':
-          result.updateCacheHandlerKey = serializers.deserialize(value,
-              specifiedType: const FullType(String)) as String?;
+          result.updateCacheHandlerKey =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )
+                  as String?;
           break;
         case 'updateCacheHandlerContext':
-          result.updateCacheHandlerContext = serializers.deserialize(value,
-              specifiedType: const FullType(Map, const [
-                const FullType(String),
-                const FullType(dynamic)
-              ])) as Map<String, dynamic>?;
+          result.updateCacheHandlerContext =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(Map, const [
+                      const FullType(String),
+                      const FullType(dynamic),
+                    ]),
+                  )
+                  as Map<String, dynamic>?;
           break;
         case 'fetchPolicy':
-          result.fetchPolicy = serializers.deserialize(value,
-                  specifiedType: const FullType(_i1.FetchPolicy))
-              as _i1.FetchPolicy?;
+          result.fetchPolicy =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(_i1.FetchPolicy),
+                  )
+                  as _i1.FetchPolicy?;
           break;
         case 'executeOnListen':
-          result.executeOnListen = serializers.deserialize(value,
-              specifiedType: const FullType(bool))! as bool;
+          result.executeOnListen =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(bool),
+                  )!
+                  as bool;
           break;
       }
     }
@@ -255,7 +371,10 @@ class _$GDeviceAuthReq extends GDeviceAuthReq {
   final String? requestId;
   @override
   final _i2.GDeviceAuthData? Function(
-      _i2.GDeviceAuthData?, _i2.GDeviceAuthData?)? updateResult;
+    _i2.GDeviceAuthData?,
+    _i2.GDeviceAuthData?,
+  )?
+  updateResult;
   @override
   final _i2.GDeviceAuthData? optimisticResponse;
   @override
@@ -272,18 +391,18 @@ class _$GDeviceAuthReq extends GDeviceAuthReq {
   factory _$GDeviceAuthReq([void Function(GDeviceAuthReqBuilder)? updates]) =>
       (GDeviceAuthReqBuilder()..update(updates))._build();
 
-  _$GDeviceAuthReq._(
-      {required this.vars,
-      required this.operation,
-      this.requestId,
-      this.updateResult,
-      this.optimisticResponse,
-      this.updateCacheHandlerKey,
-      this.updateCacheHandlerContext,
-      this.fetchPolicy,
-      required this.executeOnListen,
-      this.context})
-      : super._();
+  _$GDeviceAuthReq._({
+    required this.vars,
+    required this.operation,
+    this.requestId,
+    this.updateResult,
+    this.optimisticResponse,
+    this.updateCacheHandlerKey,
+    this.updateCacheHandlerContext,
+    this.fetchPolicy,
+    required this.executeOnListen,
+    this.context,
+  }) : super._();
   @override
   GDeviceAuthReq rebuild(void Function(GDeviceAuthReqBuilder) updates) =>
       (toBuilder()..update(updates)).build();
@@ -360,14 +479,13 @@ class GDeviceAuthReqBuilder
   set requestId(String? requestId) => _$this._requestId = requestId;
 
   _i2.GDeviceAuthData? Function(_i2.GDeviceAuthData?, _i2.GDeviceAuthData?)?
-      _updateResult;
+  _updateResult;
   _i2.GDeviceAuthData? Function(_i2.GDeviceAuthData?, _i2.GDeviceAuthData?)?
-      get updateResult => _$this._updateResult;
+  get updateResult => _$this._updateResult;
   set updateResult(
-          _i2.GDeviceAuthData? Function(
-                  _i2.GDeviceAuthData?, _i2.GDeviceAuthData?)?
-              updateResult) =>
-      _$this._updateResult = updateResult;
+    _i2.GDeviceAuthData? Function(_i2.GDeviceAuthData?, _i2.GDeviceAuthData?)?
+    updateResult,
+  ) => _$this._updateResult = updateResult;
 
   _i2.GDeviceAuthDataBuilder? _optimisticResponse;
   _i2.GDeviceAuthDataBuilder get optimisticResponse =>
@@ -384,8 +502,8 @@ class GDeviceAuthReqBuilder
   Map<String, dynamic>? get updateCacheHandlerContext =>
       _$this._updateCacheHandlerContext;
   set updateCacheHandlerContext(
-          Map<String, dynamic>? updateCacheHandlerContext) =>
-      _$this._updateCacheHandlerContext = updateCacheHandlerContext;
+    Map<String, dynamic>? updateCacheHandlerContext,
+  ) => _$this._updateCacheHandlerContext = updateCacheHandlerContext;
 
   _i1.FetchPolicy? _fetchPolicy;
   _i1.FetchPolicy? get fetchPolicy => _$this._fetchPolicy;
@@ -439,11 +557,15 @@ class GDeviceAuthReqBuilder
   _$GDeviceAuthReq _build() {
     _$GDeviceAuthReq _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           _$GDeviceAuthReq._(
             vars: vars.build(),
             operation: BuiltValueNullFieldError.checkNotNull(
-                operation, r'GDeviceAuthReq', 'operation'),
+              operation,
+              r'GDeviceAuthReq',
+              'operation',
+            ),
             requestId: requestId,
             updateResult: updateResult,
             optimisticResponse: _optimisticResponse?.build(),
@@ -451,7 +573,10 @@ class GDeviceAuthReqBuilder
             updateCacheHandlerContext: updateCacheHandlerContext,
             fetchPolicy: fetchPolicy,
             executeOnListen: BuiltValueNullFieldError.checkNotNull(
-                executeOnListen, r'GDeviceAuthReq', 'executeOnListen'),
+              executeOnListen,
+              r'GDeviceAuthReq',
+              'executeOnListen',
+            ),
             context: context,
           );
     } catch (_) {
@@ -464,7 +589,10 @@ class GDeviceAuthReqBuilder
         _optimisticResponse?.build();
       } catch (e) {
         throw BuiltValueNestedFieldError(
-            r'GDeviceAuthReq', _$failedField, e.toString());
+          r'GDeviceAuthReq',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }
@@ -482,7 +610,7 @@ class _$GaddDeviceReq extends GaddDeviceReq {
   final String? requestId;
   @override
   final _i2.GaddDeviceData? Function(_i2.GaddDeviceData?, _i2.GaddDeviceData?)?
-      updateResult;
+  updateResult;
   @override
   final _i2.GaddDeviceData? optimisticResponse;
   @override
@@ -499,18 +627,18 @@ class _$GaddDeviceReq extends GaddDeviceReq {
   factory _$GaddDeviceReq([void Function(GaddDeviceReqBuilder)? updates]) =>
       (GaddDeviceReqBuilder()..update(updates))._build();
 
-  _$GaddDeviceReq._(
-      {required this.vars,
-      required this.operation,
-      this.requestId,
-      this.updateResult,
-      this.optimisticResponse,
-      this.updateCacheHandlerKey,
-      this.updateCacheHandlerContext,
-      this.fetchPolicy,
-      required this.executeOnListen,
-      this.context})
-      : super._();
+  _$GaddDeviceReq._({
+    required this.vars,
+    required this.operation,
+    this.requestId,
+    this.updateResult,
+    this.optimisticResponse,
+    this.updateCacheHandlerKey,
+    this.updateCacheHandlerContext,
+    this.fetchPolicy,
+    required this.executeOnListen,
+    this.context,
+  }) : super._();
   @override
   GaddDeviceReq rebuild(void Function(GaddDeviceReqBuilder) updates) =>
       (toBuilder()..update(updates)).build();
@@ -587,14 +715,13 @@ class GaddDeviceReqBuilder
   set requestId(String? requestId) => _$this._requestId = requestId;
 
   _i2.GaddDeviceData? Function(_i2.GaddDeviceData?, _i2.GaddDeviceData?)?
-      _updateResult;
+  _updateResult;
   _i2.GaddDeviceData? Function(_i2.GaddDeviceData?, _i2.GaddDeviceData?)?
-      get updateResult => _$this._updateResult;
+  get updateResult => _$this._updateResult;
   set updateResult(
-          _i2.GaddDeviceData? Function(
-                  _i2.GaddDeviceData?, _i2.GaddDeviceData?)?
-              updateResult) =>
-      _$this._updateResult = updateResult;
+    _i2.GaddDeviceData? Function(_i2.GaddDeviceData?, _i2.GaddDeviceData?)?
+    updateResult,
+  ) => _$this._updateResult = updateResult;
 
   _i2.GaddDeviceDataBuilder? _optimisticResponse;
   _i2.GaddDeviceDataBuilder get optimisticResponse =>
@@ -611,8 +738,8 @@ class GaddDeviceReqBuilder
   Map<String, dynamic>? get updateCacheHandlerContext =>
       _$this._updateCacheHandlerContext;
   set updateCacheHandlerContext(
-          Map<String, dynamic>? updateCacheHandlerContext) =>
-      _$this._updateCacheHandlerContext = updateCacheHandlerContext;
+    Map<String, dynamic>? updateCacheHandlerContext,
+  ) => _$this._updateCacheHandlerContext = updateCacheHandlerContext;
 
   _i1.FetchPolicy? _fetchPolicy;
   _i1.FetchPolicy? get fetchPolicy => _$this._fetchPolicy;
@@ -666,11 +793,15 @@ class GaddDeviceReqBuilder
   _$GaddDeviceReq _build() {
     _$GaddDeviceReq _$result;
     try {
-      _$result = _$v ??
+      _$result =
+          _$v ??
           _$GaddDeviceReq._(
             vars: vars.build(),
             operation: BuiltValueNullFieldError.checkNotNull(
-                operation, r'GaddDeviceReq', 'operation'),
+              operation,
+              r'GaddDeviceReq',
+              'operation',
+            ),
             requestId: requestId,
             updateResult: updateResult,
             optimisticResponse: _optimisticResponse?.build(),
@@ -678,7 +809,10 @@ class GaddDeviceReqBuilder
             updateCacheHandlerContext: updateCacheHandlerContext,
             fetchPolicy: fetchPolicy,
             executeOnListen: BuiltValueNullFieldError.checkNotNull(
-                executeOnListen, r'GaddDeviceReq', 'executeOnListen'),
+              executeOnListen,
+              r'GaddDeviceReq',
+              'executeOnListen',
+            ),
             context: context,
           );
     } catch (_) {
@@ -691,7 +825,10 @@ class GaddDeviceReqBuilder
         _optimisticResponse?.build();
       } catch (e) {
         throw BuiltValueNestedFieldError(
-            r'GaddDeviceReq', _$failedField, e.toString());
+          r'GaddDeviceReq',
+          _$failedField,
+          e.toString(),
+        );
       }
       rethrow;
     }

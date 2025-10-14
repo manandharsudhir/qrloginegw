@@ -2,8 +2,11 @@
 // ignore_for_file: type=lint
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
+import 'package:gql_code_builder_serializers/gql_code_builder_serializers.dart'
+    as _i2;
 import 'package:qrlogin/infra/service/graphql/__generated__/serializers.gql.dart'
     as _i1;
 
@@ -17,11 +20,11 @@ abstract class GDeviceAuthData
       _$GDeviceAuthData;
 
   static void _initializeBuilder(GDeviceAuthDataBuilder b) =>
-      b..G__typename = 'EgwCpanelSubscriptionsQueries';
+      b..G__typename = 'EgwCpanelSubscriptions';
 
   @BuiltValueField(wireName: '__typename')
   String get G__typename;
-  GDeviceAuthData_deviceAuth? get deviceAuth;
+  GDeviceAuthData_deviceAuth get deviceAuth;
   static Serializer<GDeviceAuthData> get serializer =>
       _$gDeviceAuthDataSerializer;
 
@@ -47,15 +50,15 @@ abstract class GDeviceAuthData_deviceAuth
       _$GDeviceAuthData_deviceAuth;
 
   static void _initializeBuilder(GDeviceAuthData_deviceAuthBuilder b) =>
-      b..G__typename = 'OpenIddictResponseDto';
+      b..G__typename = 'DeviceCodeSubscriptionDto';
 
   @BuiltValueField(wireName: '__typename')
   String get G__typename;
-  String? get accessToken;
-  String? get refreshToken;
-  String? get idToken;
-  String? get username;
-  String? get deviceId;
+  String get accessToken;
+  String get refreshToken;
+  String get idToken;
+  String get username;
+  String get deviceId;
   static Serializer<GDeviceAuthData_deviceAuth> get serializer =>
       _$gDeviceAuthDataDeviceAuthSerializer;
 
@@ -113,7 +116,9 @@ abstract class GaddDeviceData_addDevice
 
   @BuiltValueField(wireName: '__typename')
   String get G__typename;
-  GaddDeviceData_addDevice_openIddictResponseDto? get openIddictResponseDto;
+  GaddDeviceData_addDevice_deviceCodeSubscriptionDto?
+      get deviceCodeSubscriptionDto;
+  BuiltList<GaddDeviceData_addDevice_errors>? get errors;
   static Serializer<GaddDeviceData_addDevice> get serializer =>
       _$gaddDeviceDataAddDeviceSerializer;
 
@@ -129,37 +134,139 @@ abstract class GaddDeviceData_addDevice
       );
 }
 
-abstract class GaddDeviceData_addDevice_openIddictResponseDto
+abstract class GaddDeviceData_addDevice_deviceCodeSubscriptionDto
     implements
-        Built<GaddDeviceData_addDevice_openIddictResponseDto,
-            GaddDeviceData_addDevice_openIddictResponseDtoBuilder> {
-  GaddDeviceData_addDevice_openIddictResponseDto._();
+        Built<GaddDeviceData_addDevice_deviceCodeSubscriptionDto,
+            GaddDeviceData_addDevice_deviceCodeSubscriptionDtoBuilder> {
+  GaddDeviceData_addDevice_deviceCodeSubscriptionDto._();
 
-  factory GaddDeviceData_addDevice_openIddictResponseDto(
-      [void Function(GaddDeviceData_addDevice_openIddictResponseDtoBuilder b)
-          updates]) = _$GaddDeviceData_addDevice_openIddictResponseDto;
+  factory GaddDeviceData_addDevice_deviceCodeSubscriptionDto(
+      [void Function(
+              GaddDeviceData_addDevice_deviceCodeSubscriptionDtoBuilder b)
+          updates]) = _$GaddDeviceData_addDevice_deviceCodeSubscriptionDto;
 
   static void _initializeBuilder(
-          GaddDeviceData_addDevice_openIddictResponseDtoBuilder b) =>
-      b..G__typename = 'OpenIddictResponseDto';
+          GaddDeviceData_addDevice_deviceCodeSubscriptionDtoBuilder b) =>
+      b..G__typename = 'DeviceCodeSubscriptionDto';
 
   @BuiltValueField(wireName: '__typename')
   String get G__typename;
-  String? get idToken;
-  String? get deviceId;
-  static Serializer<GaddDeviceData_addDevice_openIddictResponseDto>
+  String get accessToken;
+  String get deviceId;
+  String get idToken;
+  String get refreshToken;
+  String get username;
+  static Serializer<GaddDeviceData_addDevice_deviceCodeSubscriptionDto>
       get serializer =>
-          _$gaddDeviceDataAddDeviceOpenIddictResponseDtoSerializer;
+          _$gaddDeviceDataAddDeviceDeviceCodeSubscriptionDtoSerializer;
 
   Map<String, dynamic> toJson() => (_i1.serializers.serializeWith(
-        GaddDeviceData_addDevice_openIddictResponseDto.serializer,
+        GaddDeviceData_addDevice_deviceCodeSubscriptionDto.serializer,
         this,
       ) as Map<String, dynamic>);
 
-  static GaddDeviceData_addDevice_openIddictResponseDto? fromJson(
+  static GaddDeviceData_addDevice_deviceCodeSubscriptionDto? fromJson(
           Map<String, dynamic> json) =>
       _i1.serializers.deserializeWith(
-        GaddDeviceData_addDevice_openIddictResponseDto.serializer,
+        GaddDeviceData_addDevice_deviceCodeSubscriptionDto.serializer,
+        json,
+      );
+}
+
+abstract class GaddDeviceData_addDevice_errors {
+  @BuiltValueField(wireName: '__typename')
+  String get G__typename;
+  static Serializer<GaddDeviceData_addDevice_errors> get serializer =>
+      _i2.InlineFragmentSerializer<GaddDeviceData_addDevice_errors>(
+        'GaddDeviceData_addDevice_errors',
+        GaddDeviceData_addDevice_errors__base,
+        {
+          'ProblemDetailsError':
+              GaddDeviceData_addDevice_errors__asProblemDetailsError
+        },
+      );
+
+  Map<String, dynamic> toJson() => (_i1.serializers.serializeWith(
+        GaddDeviceData_addDevice_errors.serializer,
+        this,
+      ) as Map<String, dynamic>);
+
+  static GaddDeviceData_addDevice_errors? fromJson(Map<String, dynamic> json) =>
+      _i1.serializers.deserializeWith(
+        GaddDeviceData_addDevice_errors.serializer,
+        json,
+      );
+}
+
+abstract class GaddDeviceData_addDevice_errors__base
+    implements
+        Built<GaddDeviceData_addDevice_errors__base,
+            GaddDeviceData_addDevice_errors__baseBuilder>,
+        GaddDeviceData_addDevice_errors {
+  GaddDeviceData_addDevice_errors__base._();
+
+  factory GaddDeviceData_addDevice_errors__base(
+      [void Function(GaddDeviceData_addDevice_errors__baseBuilder b)
+          updates]) = _$GaddDeviceData_addDevice_errors__base;
+
+  static void _initializeBuilder(
+          GaddDeviceData_addDevice_errors__baseBuilder b) =>
+      b..G__typename = 'AddDeviceError';
+
+  @override
+  @BuiltValueField(wireName: '__typename')
+  String get G__typename;
+  static Serializer<GaddDeviceData_addDevice_errors__base> get serializer =>
+      _$gaddDeviceDataAddDeviceErrorsBaseSerializer;
+
+  Map<String, dynamic> toJson() => (_i1.serializers.serializeWith(
+        GaddDeviceData_addDevice_errors__base.serializer,
+        this,
+      ) as Map<String, dynamic>);
+
+  static GaddDeviceData_addDevice_errors__base? fromJson(
+          Map<String, dynamic> json) =>
+      _i1.serializers.deserializeWith(
+        GaddDeviceData_addDevice_errors__base.serializer,
+        json,
+      );
+}
+
+abstract class GaddDeviceData_addDevice_errors__asProblemDetailsError
+    implements
+        Built<GaddDeviceData_addDevice_errors__asProblemDetailsError,
+            GaddDeviceData_addDevice_errors__asProblemDetailsErrorBuilder>,
+        GaddDeviceData_addDevice_errors {
+  GaddDeviceData_addDevice_errors__asProblemDetailsError._();
+
+  factory GaddDeviceData_addDevice_errors__asProblemDetailsError(
+      [void Function(
+              GaddDeviceData_addDevice_errors__asProblemDetailsErrorBuilder b)
+          updates]) = _$GaddDeviceData_addDevice_errors__asProblemDetailsError;
+
+  static void _initializeBuilder(
+          GaddDeviceData_addDevice_errors__asProblemDetailsErrorBuilder b) =>
+      b..G__typename = 'ProblemDetailsError';
+
+  @override
+  @BuiltValueField(wireName: '__typename')
+  String get G__typename;
+  int get code;
+  String? get details;
+  String get message;
+  static Serializer<GaddDeviceData_addDevice_errors__asProblemDetailsError>
+      get serializer =>
+          _$gaddDeviceDataAddDeviceErrorsAsProblemDetailsErrorSerializer;
+
+  Map<String, dynamic> toJson() => (_i1.serializers.serializeWith(
+        GaddDeviceData_addDevice_errors__asProblemDetailsError.serializer,
+        this,
+      ) as Map<String, dynamic>);
+
+  static GaddDeviceData_addDevice_errors__asProblemDetailsError? fromJson(
+          Map<String, dynamic> json) =>
+      _i1.serializers.deserializeWith(
+        GaddDeviceData_addDevice_errors__asProblemDetailsError.serializer,
         json,
       );
 }
