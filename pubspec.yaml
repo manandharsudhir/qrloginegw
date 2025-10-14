@@ -16,13 +16,13 @@ dependencies:
   built_collection: ^5.1.1
   dio: ^5.4.0
   ferry: ^0.16.0+1
-  ferry_store: ^0.5.3+1
-  get_it: ^7.2.0
-  gql_dio_link: ^1.0.1+1
-  gql_http_link: ^1.0.1+1
+  ferry_store: ^0.6.1
+  get_it: ^8.2.0
+  gql_dio_link: ^2.0.0
+  gql_http_link: ^1.2.0
   uuid: ^4.3.3
-  gql_code_builder_serializers: ^0.1.0
-  gql_websocket_link: ^2.0.1
+  gql_code_builder_serializers: ^0.1.0+1
+  gql_websocket_link: ^2.1.0
 
 
 
@@ -30,8 +30,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
   build_runner: ^2.1.11  
-  ferry_generator: ^0.12.0
+  ferry_generator: ^0.14.0-dev.2
   json_serializable: ^6.8.0
-  freezed: ^3.0.6
+  freezed: ^3.2.3
