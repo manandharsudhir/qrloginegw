@@ -1,7 +1,7 @@
 import 'package:qrlogin/infra/service/model/link_device_success_model.dart';
 
 abstract class IlinkDevice {
-  Future<LinkDeviceSuccessModel?> listenDeviceLinking({
+  Stream<LinkDeviceSuccessModel> listenDeviceLinking({
     required String deviceId,
   });
   Future<bool> scanAndSendToken({

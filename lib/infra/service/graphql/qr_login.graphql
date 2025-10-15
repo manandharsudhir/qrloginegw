@@ -10,20 +10,21 @@ subscription DeviceAuth($deviceId: String!) {
 
 
 
-
 mutation addDevice(
   $accessToken: String!
-  $refreshToken: String!
-  $username: String
   $deviceId: String!
+  $idToken: String!
+  $refreshToken: String!
+  $username: String!
 ) {
- addDevice(
+  addDevice(
     input: {
       request: {
         accessToken: $accessToken
+        deviceId: $deviceId
+        idToken: $idToken
         refreshToken: $refreshToken
         username: $username
-        deviceId: $deviceId
       }
     }
   ) {

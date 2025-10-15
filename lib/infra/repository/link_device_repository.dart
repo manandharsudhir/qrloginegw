@@ -8,11 +8,11 @@ class LinkDeviceRepository extends IlinkDevice {
   final linkDeviceApi = GetIt.I<LinkDeviceApi>();
 
   @override
-  Future<LinkDeviceSuccessModel?> listenDeviceLinking({
+  Stream<LinkDeviceSuccessModel> listenDeviceLinking({
     required String deviceId,
-  }) async {
-    final response = await linkDeviceApi.loginReq(deviceId);
-    return response;
+  }) {
+    // Simply forward the stream from the API
+    return linkDeviceApi.loginStream(deviceId).asBroadcastStream();
   }
 
   @override

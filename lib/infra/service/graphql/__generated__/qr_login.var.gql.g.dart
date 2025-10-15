@@ -83,26 +83,28 @@ class _$GaddDeviceVarsSerializer
         object.accessToken,
         specifiedType: const FullType(String),
       ),
-      'refreshToken',
-      serializers.serialize(
-        object.refreshToken,
-        specifiedType: const FullType(String),
-      ),
       'deviceId',
       serializers.serialize(
         object.deviceId,
         specifiedType: const FullType(String),
       ),
+      'idToken',
+      serializers.serialize(
+        object.idToken,
+        specifiedType: const FullType(String),
+      ),
+      'refreshToken',
+      serializers.serialize(
+        object.refreshToken,
+        specifiedType: const FullType(String),
+      ),
+      'username',
+      serializers.serialize(
+        object.username,
+        specifiedType: const FullType(String),
+      ),
     ];
-    Object? value;
-    value = object.username;
-    if (value != null) {
-      result
-        ..add('username')
-        ..add(
-          serializers.serialize(value, specifiedType: const FullType(String)),
-        );
-    }
+
     return result;
   }
 
@@ -128,6 +130,22 @@ class _$GaddDeviceVarsSerializer
                   )!
                   as String;
           break;
+        case 'deviceId':
+          result.deviceId =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )!
+                  as String;
+          break;
+        case 'idToken':
+          result.idToken =
+              serializers.deserialize(
+                    value,
+                    specifiedType: const FullType(String),
+                  )!
+                  as String;
+          break;
         case 'refreshToken':
           result.refreshToken =
               serializers.deserialize(
@@ -138,14 +156,6 @@ class _$GaddDeviceVarsSerializer
           break;
         case 'username':
           result.username =
-              serializers.deserialize(
-                    value,
-                    specifiedType: const FullType(String),
-                  )
-                  as String?;
-          break;
-        case 'deviceId':
-          result.deviceId =
               serializers.deserialize(
                     value,
                     specifiedType: const FullType(String),
@@ -247,20 +257,23 @@ class _$GaddDeviceVars extends GaddDeviceVars {
   @override
   final String accessToken;
   @override
+  final String deviceId;
+  @override
+  final String idToken;
+  @override
   final String refreshToken;
   @override
-  final String? username;
-  @override
-  final String deviceId;
+  final String username;
 
   factory _$GaddDeviceVars([void Function(GaddDeviceVarsBuilder)? updates]) =>
       (GaddDeviceVarsBuilder()..update(updates))._build();
 
   _$GaddDeviceVars._({
     required this.accessToken,
-    required this.refreshToken,
-    this.username,
     required this.deviceId,
+    required this.idToken,
+    required this.refreshToken,
+    required this.username,
   }) : super._();
   @override
   GaddDeviceVars rebuild(void Function(GaddDeviceVarsBuilder) updates) =>
@@ -274,18 +287,20 @@ class _$GaddDeviceVars extends GaddDeviceVars {
     if (identical(other, this)) return true;
     return other is GaddDeviceVars &&
         accessToken == other.accessToken &&
+        deviceId == other.deviceId &&
+        idToken == other.idToken &&
         refreshToken == other.refreshToken &&
-        username == other.username &&
-        deviceId == other.deviceId;
+        username == other.username;
   }
 
   @override
   int get hashCode {
     var _$hash = 0;
     _$hash = $jc(_$hash, accessToken.hashCode);
+    _$hash = $jc(_$hash, deviceId.hashCode);
+    _$hash = $jc(_$hash, idToken.hashCode);
     _$hash = $jc(_$hash, refreshToken.hashCode);
     _$hash = $jc(_$hash, username.hashCode);
-    _$hash = $jc(_$hash, deviceId.hashCode);
     _$hash = $jf(_$hash);
     return _$hash;
   }
@@ -294,9 +309,10 @@ class _$GaddDeviceVars extends GaddDeviceVars {
   String toString() {
     return (newBuiltValueToStringHelper(r'GaddDeviceVars')
           ..add('accessToken', accessToken)
+          ..add('deviceId', deviceId)
+          ..add('idToken', idToken)
           ..add('refreshToken', refreshToken)
-          ..add('username', username)
-          ..add('deviceId', deviceId))
+          ..add('username', username))
         .toString();
   }
 }
@@ -309,6 +325,14 @@ class GaddDeviceVarsBuilder
   String? get accessToken => _$this._accessToken;
   set accessToken(String? accessToken) => _$this._accessToken = accessToken;
 
+  String? _deviceId;
+  String? get deviceId => _$this._deviceId;
+  set deviceId(String? deviceId) => _$this._deviceId = deviceId;
+
+  String? _idToken;
+  String? get idToken => _$this._idToken;
+  set idToken(String? idToken) => _$this._idToken = idToken;
+
   String? _refreshToken;
   String? get refreshToken => _$this._refreshToken;
   set refreshToken(String? refreshToken) => _$this._refreshToken = refreshToken;
@@ -317,19 +341,16 @@ class GaddDeviceVarsBuilder
   String? get username => _$this._username;
   set username(String? username) => _$this._username = username;
 
-  String? _deviceId;
-  String? get deviceId => _$this._deviceId;
-  set deviceId(String? deviceId) => _$this._deviceId = deviceId;
-
   GaddDeviceVarsBuilder();
 
   GaddDeviceVarsBuilder get _$this {
     final $v = _$v;
     if ($v != null) {
       _accessToken = $v.accessToken;
+      _deviceId = $v.deviceId;
+      _idToken = $v.idToken;
       _refreshToken = $v.refreshToken;
       _username = $v.username;
-      _deviceId = $v.deviceId;
       _$v = null;
     }
     return this;
@@ -357,16 +378,25 @@ class GaddDeviceVarsBuilder
             r'GaddDeviceVars',
             'accessToken',
           ),
+          deviceId: BuiltValueNullFieldError.checkNotNull(
+            deviceId,
+            r'GaddDeviceVars',
+            'deviceId',
+          ),
+          idToken: BuiltValueNullFieldError.checkNotNull(
+            idToken,
+            r'GaddDeviceVars',
+            'idToken',
+          ),
           refreshToken: BuiltValueNullFieldError.checkNotNull(
             refreshToken,
             r'GaddDeviceVars',
             'refreshToken',
           ),
-          username: username,
-          deviceId: BuiltValueNullFieldError.checkNotNull(
-            deviceId,
+          username: BuiltValueNullFieldError.checkNotNull(
+            username,
             r'GaddDeviceVars',
-            'deviceId',
+            'username',
           ),
         );
     replace(_$result);

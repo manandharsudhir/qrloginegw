@@ -84,6 +84,24 @@ const addDevice = _i1.OperationDefinitionNode(
       directives: [],
     ),
     _i1.VariableDefinitionNode(
+      variable: _i1.VariableNode(name: _i1.NameNode(value: 'deviceId')),
+      type: _i1.NamedTypeNode(
+        name: _i1.NameNode(value: 'String'),
+        isNonNull: true,
+      ),
+      defaultValue: _i1.DefaultValueNode(value: null),
+      directives: [],
+    ),
+    _i1.VariableDefinitionNode(
+      variable: _i1.VariableNode(name: _i1.NameNode(value: 'idToken')),
+      type: _i1.NamedTypeNode(
+        name: _i1.NameNode(value: 'String'),
+        isNonNull: true,
+      ),
+      defaultValue: _i1.DefaultValueNode(value: null),
+      directives: [],
+    ),
+    _i1.VariableDefinitionNode(
       variable: _i1.VariableNode(name: _i1.NameNode(value: 'refreshToken')),
       type: _i1.NamedTypeNode(
         name: _i1.NameNode(value: 'String'),
@@ -94,15 +112,6 @@ const addDevice = _i1.OperationDefinitionNode(
     ),
     _i1.VariableDefinitionNode(
       variable: _i1.VariableNode(name: _i1.NameNode(value: 'username')),
-      type: _i1.NamedTypeNode(
-        name: _i1.NameNode(value: 'String'),
-        isNonNull: false,
-      ),
-      defaultValue: _i1.DefaultValueNode(value: null),
-      directives: [],
-    ),
-    _i1.VariableDefinitionNode(
-      variable: _i1.VariableNode(name: _i1.NameNode(value: 'deviceId')),
       type: _i1.NamedTypeNode(
         name: _i1.NameNode(value: 'String'),
         isNonNull: true,
@@ -129,6 +138,15 @@ const addDevice = _i1.OperationDefinitionNode(
                       name: _i1.NameNode(value: 'accessToken')),
                 ),
                 _i1.ObjectFieldNode(
+                  name: _i1.NameNode(value: 'deviceId'),
+                  value:
+                      _i1.VariableNode(name: _i1.NameNode(value: 'deviceId')),
+                ),
+                _i1.ObjectFieldNode(
+                  name: _i1.NameNode(value: 'idToken'),
+                  value: _i1.VariableNode(name: _i1.NameNode(value: 'idToken')),
+                ),
+                _i1.ObjectFieldNode(
                   name: _i1.NameNode(value: 'refreshToken'),
                   value: _i1.VariableNode(
                       name: _i1.NameNode(value: 'refreshToken')),
@@ -137,11 +155,6 @@ const addDevice = _i1.OperationDefinitionNode(
                   name: _i1.NameNode(value: 'username'),
                   value:
                       _i1.VariableNode(name: _i1.NameNode(value: 'username')),
-                ),
-                _i1.ObjectFieldNode(
-                  name: _i1.NameNode(value: 'deviceId'),
-                  value:
-                      _i1.VariableNode(name: _i1.NameNode(value: 'deviceId')),
                 ),
               ]),
             )

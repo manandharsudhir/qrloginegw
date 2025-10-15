@@ -40,9 +40,10 @@ abstract class GaddDeviceVars
       _$GaddDeviceVars;
 
   String get accessToken;
-  String get refreshToken;
-  String? get username;
   String get deviceId;
+  String get idToken;
+  String get refreshToken;
+  String get username;
   static Serializer<GaddDeviceVars> get serializer =>
       _$gaddDeviceVarsSerializer;
 

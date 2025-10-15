@@ -12,58 +12,25 @@ class LinkDeviceApi {
   final Client tvQrClient;
   final Client loginClient;
 
-  Future<LinkDeviceSuccessModel?> loginReq(String deviceId) async {
-    final completer = Completer<LinkDeviceSuccessModel?>();
+  Stream<LinkDeviceSuccessModel> loginStream(String deviceId) async* {
+    await for (final result in tvQrClient.request(
+      GDeviceAuthReq((b) => b..vars.deviceId = deviceId),
+    )) {
+      if (result.hasErrors) {
+        log("GraphQL errors: ${result.graphqlErrors}");
+        continue;
+      }
 
-    try {
-      log("🔄 Starting subscription for deviceId: $deviceId");
+      final token = result.data?.deviceAuth.accessToken;
+      final refreshToken = result.data?.deviceAuth.refreshToken;
 
-      tvQrClient
-          .request(
-            GDeviceAuthReq((builder) {
-              builder.vars.deviceId = deviceId;
-            }),
-          )
-          .listen(
-            (result) async {
-              if (result.data != null) {
-                log("✅ Received data: ${result.data}");
-
-                if (result.hasErrors) {
-                  log("❌ GraphQL Errors: ${result.graphqlErrors}");
-                  completer.completeError("GraphQL Errors");
-                }
-
-                final token = result.data?.deviceAuth.accessToken;
-                final refreshToken = result.data?.deviceAuth.refreshToken;
-                if (token != null) {
-                  log("🔑 Access Token: $token");
-
-                  if (!completer.isCompleted) {
-                    completer.complete(
-                      LinkDeviceSuccessModel(
-                        accessToken: token,
-                        refreshToken: refreshToken ?? "",
-                      ),
-                    );
-                  }
-                } else {
-                  completer.complete(null);
-                }
-              }
-            },
-            onError: (e) {
-              log("⚠️ Subscription error: $e");
-              if (!completer.isCompleted) {
-                completer.completeError(e);
-              }
-            },
-          );
-
-      return completer.future;
-    } on Exception catch (e) {
-      log("❌ Exception in loginReq: $e");
-      rethrow;
+      // Only yield if token exists
+      if (token != null && token.isNotEmpty) {
+        yield LinkDeviceSuccessModel(
+          accessToken: token,
+          refreshToken: refreshToken ?? "",
+        );
+      }
     }
   }
 
@@ -78,9 +45,10 @@ class LinkDeviceApi {
           .request(
             GaddDeviceReq((builder) {
               builder.vars.accessToken = token;
+              builder.vars.deviceId = deviceID;
+              builder.vars.idToken = deviceID;
               builder.vars.refreshToken = refreshToken;
               builder.vars.username = username;
-              builder.vars.deviceId = deviceID;
             }),
           )
           .map((result) {
