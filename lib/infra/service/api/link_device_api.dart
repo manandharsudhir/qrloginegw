@@ -12,26 +12,55 @@ class LinkDeviceApi {
   final Client tvQrClient;
   final Client loginClient;
 
-  Stream<LinkDeviceSuccessModel> loginStream(String deviceId) async* {
-    await for (final result in tvQrClient.request(
-      GDeviceAuthReq((b) => b..vars.deviceId = deviceId),
-    )) {
-      if (result.hasErrors) {
-        log("GraphQL errors: ${result.graphqlErrors}");
-        continue;
-      }
+  Stream<LinkDeviceSuccessModel> loginStream(String deviceId) {
+    return tvQrClient
+        .request(
+          GDeviceAuthReq(
+            (b) => b
+              ..vars.deviceId = deviceId
+              // Optional but recommended: Ensures Ferry doesn't serve stale cache
+              ..fetchPolicy = FetchPolicy.NetworkOnly,
+          ),
+        )
+        .transform(
+          StreamTransformer.fromHandlers(
+            handleData: (result, sink) {
+              // 1. Check for link-level exceptions (Network errors, timeouts)
+              if (result.linkException != null) {
+                log("🛑 FERRY LINK EXCEPTION: ${result.linkException}");
+                if (result.linkException?.originalException != null) {
+                  log(
+                    "🛑 ORIGINAL ERROR: ${result.linkException?.originalException}",
+                  );
+                }
+                sink.addError(
+                  Exception("Network Error: ${result.linkException}"),
+                );
+                return;
+              }
 
-      final token = result.data?.deviceAuth.accessToken;
-      final refreshToken = result.data?.deviceAuth.refreshToken;
+              // 2. Check for GraphQL specific errors (Validation, Auth, etc)
+              if (result.hasErrors) {
+                sink.addError(
+                  Exception("GraphQL errors: ${result.graphqlErrors}"),
+                );
+                return;
+              }
 
-      // Only yield if token exists
-      if (token != null && token.isNotEmpty) {
-        yield LinkDeviceSuccessModel(
-          accessToken: token,
-          refreshToken: refreshToken ?? "",
+              // 3. Check for the actual data
+              final data = result.data?.deviceAuth;
+              if (data != null && data.accessToken.isNotEmpty) {
+                // We have the token! Emit the success model.
+                sink.add(
+                  LinkDeviceSuccessModel(
+                    accessToken: data.accessToken,
+                    refreshToken: data.refreshToken ?? "",
+                  ),
+                );
+              }
+            },
+          ),
         );
-      }
-    }
   }
 
   Future<bool> initiateLogin({

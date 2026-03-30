@@ -11,8 +11,7 @@ class LinkDeviceRepository extends IlinkDevice {
   Stream<LinkDeviceSuccessModel> listenDeviceLinking({
     required String deviceId,
   }) {
-    // Simply forward the stream from the API
-    return linkDeviceApi.loginStream(deviceId).asBroadcastStream();
+    return linkDeviceApi.loginStream(deviceId);
   }
 
   @override
